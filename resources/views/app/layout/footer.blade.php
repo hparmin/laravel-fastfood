@@ -81,14 +81,7 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 
-<script>
-    var map = L.map('map').setView([35.700105, 51.400394], 14);
-    var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-    }).addTo(map);
-    var marker = L.marker([35.700105, 51.400394]).addTo(map)
-        .bindPopup('<b>webprog</b>').openPopup();
-</script>
+@yield('script')
 </body>
 
 </html>
