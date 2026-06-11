@@ -7,11 +7,25 @@ use Illuminate\Http\Request;
 
 class SlidersController extends Controller
 {
+    public function index()
+    {
+        $sliders = Sliders::all();
+        return view('panel.slider.index',compact('sliders'));
+    }
+
+    public function edit(Sliders $slider)
+    {
+        return view('panel.slider.edit',compact('slider'));
+    }
+    public function destroy(Sliders $slider)
+    {
+        $slider->delete();
+        return redirect()->route('slider.index')->with('warning','اسلایدر با موفقیت حذف شد.');
+    }
     public function create()
     {
         return view('panel.slider.create');
     }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -44,22 +58,5 @@ class SlidersController extends Controller
         ]);
         return redirect()->route('slider.edit',['slider' => $slider->id])->with('success','اسلایدر با موفقیت آپدیت شد.');
     }
-
-    public function index()
-    {
-        $sliders = Sliders::all();
-        return view('panel.slider.index',compact('sliders'));
-    }
-
-    public function edit(Sliders $slider)
-    {
-        return view('panel.slider.edit',compact('slider'));
-    }
-    public function destroy(Sliders $slider)
-    {
-        $slider->delete();
-        return redirect()->route('slider.index')->with('warning','اسلایدر با موفقیت حذف شد.');
-    }
-
 
 }

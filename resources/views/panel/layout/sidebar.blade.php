@@ -63,7 +63,7 @@
                         <a class="dropdown-item" href="{{route('slider.index')}}">اسلایدر صفحه اصلی</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">بخش ویژگی ها</a>
+                        <a class="dropdown-item" href="{{ route('feature.index') }}">بخش ویژگی ها</a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="#">بخش درباره ما</a>
