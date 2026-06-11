@@ -11,7 +11,7 @@
             popup: 'colored-toast'
         },
         showConfirmButton: false,
-        timer: 7000,
+        timer: 5000,
         timerProgressBar: true,
     })
     @if(session('success'))

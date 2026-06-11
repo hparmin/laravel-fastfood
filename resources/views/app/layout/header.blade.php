@@ -14,12 +14,14 @@
     <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-@yield('links')
+    @yield('links')
 
 </head>
 
 <body>
-<div>
+<div class="
+{{request()->is('/') ? "" : "sub_page"}}
+">
     <div class="hero_area">
         <div class="bg-box">
             <img src="{{ asset('/images/hero-bg.jpg') }}" alt="">
@@ -28,9 +30,9 @@
         <header class="header_section">
             <div class="container">
                 <nav class="navbar navbar-expand-lg custom_nav-container">
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="{{ route('home') }}">
                             <span>
-                                webprog.io
+                                ArminHajipor.ir
                             </span>
                     </a>
 
@@ -42,14 +44,14 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="index.html">صفحه اصلی</a>
+                            <li class="nav-item {{request()->is('/') ? "active" : ""}}">
+                                <a class="nav-link" href="{{ route('home') }}">صفحه اصلی</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="menu.html">منو</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="about.html">درباره ما</a>
+                            <li class="nav-item {{request()->is('about') ? "active" : ""}}">
+                                <a class="nav-link" href="{{ route('app.about') }}">درباره ما</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="contact.html">تماس باما</a>
@@ -62,8 +64,8 @@
                                         3
                                     </span>
                             </a>
-                            <a href="login.html" class="btn-auth">
-                                ورود
+                            <a href="{{ route('panel.index') }}" class="btn-auth">
+                                حساب کاربری
                             </a>
                         </div>
                     </div>
@@ -72,102 +74,9 @@
         </header>
         <!-- end header section -->
         <!-- slider section -->
-        <section class="slider_section">
-            <div id="customCarousel1" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-7 col-lg-6">
-                                    <div class="detail-box">
-                                        <h2 class="mb-3 fw-bold">
-                                            لورم ایپسوم متن ساختگی
-                                        </h2>
-                                        <p>
-                                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده
-                                            از
-                                            طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و
-                                            سطرآنچنان که
-                                            لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف
-                                            بهبود
-                                            ابزارهای کاربردی می باشد.
-                                        </p>
-                                        <div class="btn-box">
-                                            <a href="" class="btn1">
-                                                سفارش
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-7 col-lg-6">
-                                    <div class="detail-box">
-                                        <h2 class="mb-3 fw-bold">
-                                            لورم ایپسوم متن ساختگی
-                                        </h2>
-                                        <p>
-                                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده
-                                            از
-                                            طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و
-                                            سطرآنچنان که
-                                            لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف
-                                            بهبود
-                                            ابزارهای کاربردی می باشد.
-                                        </p>
-                                        <div class="btn-box">
-                                            <a href="" class="btn1">
-                                                سفارش
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-7 col-lg-6">
-                                    <div class="detail-box">
-                                        <h2 class="mb-3 fw-bold">
-                                            لورم ایپسوم متن ساختگی
-                                        </h2>
-                                        <p>
-                                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده
-                                            از
-                                            طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و
-                                            سطرآنچنان که
-                                            لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف
-                                            بهبود
-                                            ابزارهای کاربردی می باشد.
-                                        </p>
-                                        <div class="btn-box">
-                                            <a href="" class="btn1">
-                                                سفارش
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <ol class="carousel-indicators">
-                        <li data-bs-target="#customCarousel1" data-bs-slide-to="0" class="active"></li>
-                        <li data-bs-target="#customCarousel1" data-bs-slide-to="1"></li>
-                        <li data-bs-target="#customCarousel1" data-bs-slide-to="2"></li>
-                    </ol>
-                </div>
-            </div>
-
-        </section>
-
+        @if(request()->is('/'))
+            @include('app.layout.slider')
+        @endif
         <!-- end slider section -->
     </div>
 </div>

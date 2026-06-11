@@ -2,10 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SlidersController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () { return view('app.index');})->name('home');
+
+// example:
+Route::get('/',[HomeController::class,'index'])->name('home');
+
+// app routes
+//Route::get('/', function () { return view('app.index');})->name('home');
+Route::get('/about', function () { return view('app.about');})->name('app.about');
+
+
+// pane routes:
 Route::get('/panel', function () { return view('panel.index');})->name('panel.index');
-
 Route::group(['prefix'=> 'sliders'], function (){
     Route::get('/create',[SlidersController::class,'create'])->name('slider.create');
     Route::post('/store',[SlidersController::class,'store'])->name('slider.store');
