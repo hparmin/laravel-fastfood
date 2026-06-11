@@ -1,4 +1,5 @@
 @extends('panel.layout.master')
+@section('title','پنل مدیریت')
 @section('dashboard-scripts')
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
@@ -146,7 +147,6 @@
         }); // end am5.ready()
     </script>
 @endsection
-@section('title','پنل مدیریت')
 @section('content')
     <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">

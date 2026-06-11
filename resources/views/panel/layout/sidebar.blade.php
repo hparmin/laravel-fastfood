@@ -2,16 +2,23 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="index.html">
+                <a class="nav-link
+                {{ request()->is('panel') ? 'active' : '' }}
+                " aria-current="page" href="{{ route('panel.index') }}">
                     <i class="bi bi-grid me-2"></i>
                     داشبورد
                 </a>
             </li>
-
             <li class="nav-item">
                 <a class="nav-link" href="#">
                     <i class="bi bi-people me-2"></i>
                     کاربران
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('slider.index') }}">
+                    <i class="bi bi-people me-2"></i>
+                    اسلایدر
                 </a>
             </li>
             <li class="nav-item">
@@ -45,13 +52,15 @@
                 </a>
             </li>
             <li class="nav-item dropdown-center">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <a class="nav-link dropdown-toggle
+                {{ request()->is('sliders*') ? 'active' : '' }}
+                " href="#" role="button" data-bs-toggle="dropdown">
                     <i class="bi bi-gear  me-2"></i>
                     تنظیمات سایت
                 </a>
                 <ul class="dropdown-menu sidebar-menu">
                     <li>
-                        <a class="dropdown-item" href="#">اسلایدر صفحه اصلی</a>
+                        <a class="dropdown-item" href="{{route('slider.index')}}">اسلایدر صفحه اصلی</a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="#">بخش ویژگی ها</a>
