@@ -6,6 +6,7 @@ use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactUsController;
+use \App\Http\Controllers\FooterController;
 
 
 // app routes
@@ -51,3 +52,10 @@ Route::group(['prefix'=> 'contact_us'], function (){
 //    Route::put('/{about}',[AboutUsController::class,'update'])->name('about.update');
 });
 
+
+// the footer
+Route::group(['prefix'=> 'footer'], function (){
+    Route::get('/settings',[FooterController::class,'index'])->name('footer.index');
+    Route::get('/edit',[FooterController::class,'edit'])->name('footer.edit');
+    Route::put('/{footer}/update',[FooterController::class,'update'])->name('footer.update');
+});

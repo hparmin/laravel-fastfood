@@ -1,5 +1,3 @@
-
-<!-- footer section -->
 <footer class="footer_section">
     <div class="container">
         <div class="row">
@@ -11,48 +9,46 @@
                     <div class="contact_link_box">
                         <a href="">
                             <i class="bi bi-geo-alt-fill"></i>
-                            <span>
-                                    آدرس
-                                </span>
+                            <span>{{ $footer->contact_address }}</span>
                         </a>
                         <a href="">
                             <div class="d-flex justify-content-center">
                                 <i class="bi bi-telephone-fill" aria-hidden="true"></i>
-                                <p class="my-0" style="direction: ltr;">
-                                    0910 000 0000
-                                </p>
+                                <p class="my-0" style="direction: ltr;">{{ $footer->contact_phone }}</p>
                             </div>
                         </a>
                         <a href="">
                             <i class="bi bi-envelope-fill"></i>
-                            <span>
-                                    demo@gmail.com
-                                </span>
+                            <span>{{ $footer->contact_email }}</span>
                         </a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 footer-col">
                 <div class="footer_detail">
-                    <a href="" class="footer-logo">
-                        webprog.io
-                    </a>
-                    <p>
-                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.
-                    </p>
+                    <a href="" class="footer-logo">{{ $footer->title }} </a>
+                    <p>{{ $footer->body }} </p>
                     <div class="footer_social">
-                        <a href="">
-                            <i class="bi bi-telegram"></i>
-                        </a>
-                        <a href="">
-                            <i class="bi bi-whatsapp"></i>
-                        </a>
-                        <a href="">
-                            <i class="bi bi-instagram"></i>
-                        </a>
-                        <a href="">
-                            <i class="bi bi-youtube"></i>
-                        </a>
+                        @if($footer->telegram_link)
+                            <a href="{{ $footer->telegram_link }} ">
+                                <i class="bi bi-telegram"></i>
+                            </a>
+                        @endif
+                        @if($footer->whatsapp_link)
+                            <a href="{{ $footer->whatsapp_link }}">
+                                <i class="bi bi-whatsapp"></i>
+                            </a>
+                        @endif
+                        @if($footer->instagram_link)
+                            <a href="{{ $footer->instagram_link }}">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                        @endif
+                        @if($footer->youtube_link)
+                            <a href="{{ $footer->youtube_link }}">
+                                <i class="bi bi-youtube"></i>
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -60,18 +56,14 @@
                 <h4>
                     ساعت کاری
                 </h4>
+                <p>{{ $footer->work_days }}</p>
                 <p>
-                    هر روز
-                </p>
-                <p>
-                    10.00 صبح تا 12.00 شب
+                    {{ $footer->work_hour_from }} صبح تا {{ $footer->work_hour_to }} شب
                 </p>
             </div>
         </div>
         <div class="footer-info">
-            <p>
-                لورم ایپسوم متن ساختگی با تولید سادگی
-            </p>
+            <p>{{ $footer->copyright }} </p>
         </div>
     </div>
 </footer>
@@ -124,3 +116,4 @@
 </body>
 
 </html>
+

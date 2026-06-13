@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class footer extends Model
 {
-    //
+    protected $table = 'footer';
+    protected $guarded = [];
 }

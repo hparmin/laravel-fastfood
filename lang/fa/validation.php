@@ -165,6 +165,9 @@ return [
         'quantity'          => 'تعداد',
         'primary_image'     => 'تصویر اصلی',
         'subject'     => 'عنوان',
+        'contact_address'     => 'آدرس',
+        'contact_phone'     => 'شماره تماس',
+        'contact_email'     => 'ایمیل',
     ],
 
 ];

@@ -56,6 +56,7 @@
                 {{ request()->is('sliders*') ? 'active' : '' }}
                 {{ request()->is('feature*') ? 'active' : '' }}
                 {{ request()->is('about*') ? 'active' : '' }}
+                {{ request()->is('footer*') ? 'active' : '' }}
                 " href="#" role="button" data-bs-toggle="dropdown">
                     <i class="bi bi-gear  me-2"></i>
                     تنظیمات سایت
@@ -74,7 +75,7 @@
                         <a class="dropdown-item" href="{{ route('contact.showall') }}">پیام ها</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">بخش فوتر</a>
+                        <a class="dropdown-item" href="{{ route('footer.index') }}">بخش فوتر</a>
                     </li>
                 </ul>
             </li>
