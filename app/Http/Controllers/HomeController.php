@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\aboutUs;
 use Illuminate\Http\Request;
 use App\Models\Sliders;
 use App\Models\Feature;
@@ -12,6 +13,7 @@ class HomeController extends Controller
     {
         $features = feature::all();
         $sliders = Sliders::all();
-        return view('app.index', compact('sliders','features'));
+        $about_us = aboutUs::first();
+        return view('app.index', compact('sliders','features','about_us'));
     }
 }

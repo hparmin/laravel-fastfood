@@ -4,11 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SlidersController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AboutUsController;
 
 
 // app routes
 Route::get('/',[HomeController::class,'index'])->name('home');
-Route::get('/about', function () { return view('app.about');})->name('app.about');
+Route::get('/about-us', [AboutUsController::class,'show'])->name('app.about-us');
 
 
 // panel routes:
@@ -30,5 +31,19 @@ Route::group(['prefix'=> 'feature'], function (){
     Route::get('/{feature}/edit',[FeatureController::class,'edit'])->name('feature.edit');
     Route::put('/{feature}',[FeatureController::class,'update'])->name('feature.update');
     Route::delete('/{feature}',[FeatureController::class,'destroy'])->name('feature.destroy');
+});
+
+// the aboutUs
+Route::group(['prefix'=> 'about'], function (){
+    Route::get('/',[AboutUsController::class,'index'])->name('about.index');
+    Route::get('/{about}/edit',[AboutUsController::class,'edit'])->name('about.edit');
+    Route::put('/{about}',[AboutUsController::class,'update'])->name('about.update');
+});
+
+// the ContactUs
+Route::group(['prefix'=> 'contact_us'], function (){
+    Route::get('/',function () { return view('app.contact-us');})->name('app.contact.index');
+//    Route::get('/{about}/edit',[AboutUsController::class,'edit'])->name('about.edit');
+//    Route::put('/{about}',[AboutUsController::class,'update'])->name('about.update');
 });
 

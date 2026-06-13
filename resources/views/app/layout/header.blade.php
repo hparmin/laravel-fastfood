@@ -50,11 +50,11 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="menu.html">منو</a>
                             </li>
-                            <li class="nav-item {{request()->is('about') ? "active" : ""}}">
-                                <a class="nav-link" href="{{ route('app.about') }}">درباره ما</a>
+                            <li class="nav-item {{request()->is('about-us') ? "active" : ""}}">
+                                <a class="nav-link" href="{{ route('app.about-us') }}">درباره ما</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="contact.html">تماس باما</a>
+                            <li class="nav-item {{request()->is('contact_us') ? "active" : ""}}">
+                                <a class="nav-link" href="{{ route('app.contact.index') }}">تماس باما</a>
                             </li>
                         </ul>
                         <div class="user_option">
