@@ -5,6 +5,7 @@ use App\Http\Controllers\SlidersController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\ContactUsController;
 
 
 // app routes
@@ -42,8 +43,11 @@ Route::group(['prefix'=> 'about'], function (){
 
 // the ContactUs
 Route::group(['prefix'=> 'contact_us'], function (){
-    Route::get('/',function () { return view('app.contact-us');})->name('app.contact.index');
-//    Route::get('/{about}/edit',[AboutUsController::class,'edit'])->name('about.edit');
+    Route::post('/store',[ContactUsController::class,'store'])->name('contact.store');
+    Route::get('/',[ContactUsController::class,'index'])->name('contact.index');
+    Route::get('/all',[ContactUsController::class,'showall'])->name('contact.showall');
+    Route::get('/{contact}/show',[ContactUsController::class,'show'])->name('contact.show');
+    Route::delete('/{contact_us}',[ContactUsController::class,'destroy'])->name('contact.destroy');
 //    Route::put('/{about}',[AboutUsController::class,'update'])->name('about.update');
 });
 

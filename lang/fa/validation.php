@@ -164,6 +164,7 @@ return [
         'slug'              => 'اسلاگ',
         'quantity'          => 'تعداد',
         'primary_image'     => 'تصویر اصلی',
+        'subject'     => 'عنوان',
     ],
 
 ];

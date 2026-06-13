@@ -1198,6 +1198,32 @@ a:focus {
   height: 70vh !important;
 }
 
+/* styles of sweetalert2 */
+.colored-toast.swal2-icon-success{
+    background-color: #a5dc86;
+}
+.colored-toast.swal2-icon-error{
+    background-color: #f27474;
+}
+.colored-toast.swal2-icon-warning {
+    background-color: #f8bb86;
+}
+.colored-toast.swal2-icon-info {
+    background-color: #3fc3ee;
+}
+.colored-toast.swal2-icon-question {
+    background-color: #87adbd;
+}
+.colored-toast .swal2-title{
+    color: #fff;
+}
+.colored-toast .swal2-close {
+    color: #fff;
+}
+.colored-toast .swal2-html-container{
+    color: #fff;
+}
+/* end styles of sweetalert2 */
 /* Responsive */
 @media (max-width: 1300px) {
 }

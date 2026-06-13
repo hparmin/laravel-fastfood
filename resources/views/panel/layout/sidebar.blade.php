@@ -71,6 +71,9 @@
                         <a class="dropdown-item" href="{{ route('about.index') }}">بخش درباره ما</a>
                     </li>
                     <li>
+                        <a class="dropdown-item" href="{{ route('contact.showall') }}">پیام ها</a>
+                    </li>
+                    <li>
                         <a class="dropdown-item" href="#">بخش فوتر</a>
                     </li>
                 </ul>
