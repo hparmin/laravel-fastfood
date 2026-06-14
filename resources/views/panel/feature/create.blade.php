@@ -1,5 +1,5 @@
 @extends('panel.layout.master')
-@section('title','ایجاد اسلایدر')
+@section('title','ایجاد ویژگی')
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
         <h4 class="fw-bold">ایجاد ویژگی</h4>

@@ -15,7 +15,7 @@
     <div>
         <div class="form-text text-danger">@error('body') {{ $message }} @enderror</div>
         <textarea name="body" rows="10" style="height: 100px" class="form-control"
-                  placeholder="متن پیام">value="{{ old('body') }}" </textarea>
+                  placeholder="متن پیام">{{old('body')}}</textarea>
     </div>
     <div class="btn_box">
         <button>

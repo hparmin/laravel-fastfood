@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactUsController;
 use \App\Http\Controllers\FooterController;
+use \App\Http\Controllers\CategoryController;
 
 
 // app routes
@@ -52,10 +53,19 @@ Route::group(['prefix'=> 'contact_us'], function (){
 //    Route::put('/{about}',[AboutUsController::class,'update'])->name('about.update');
 });
 
-
 // the footer
 Route::group(['prefix'=> 'footer'], function (){
     Route::get('/settings',[FooterController::class,'index'])->name('footer.index');
     Route::get('/edit',[FooterController::class,'edit'])->name('footer.edit');
     Route::put('/{footer}/update',[FooterController::class,'update'])->name('footer.update');
+});
+
+// the footer
+Route::group(['prefix'=> 'categories'], function (){
+    Route::get('/',[CategoryController::class,'index'])->name('categories.index');
+    Route::get('/create',[CategoryController::class,'create'])->name('categories.create');
+    Route::post('/store',[CategoryController::class,'store'])->name('categories.store');
+    Route::delete('/{category}/destroy',[CategoryController::class,'destroy'])->name('category.destroy');
+    Route::get('/{category}/edit',[CategoryController::class,'edit'])->name('category.edit');
+    Route::put('/{category}/update',[CategoryController::class,'update'])->name('category.update');
 });
