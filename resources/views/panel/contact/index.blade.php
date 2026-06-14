@@ -21,7 +21,7 @@
                     <td>{{ $message->email }}</td>
                     <td>{{ $message->subject }}</td>
                     <td class="d-flex">
-                        <a href="{{ route('contact.show',['contact' => $message->id]) }}" class="btn btn-primary ms-1">نمایش</a>
+                        <a href="{{ route('contact.show',['contact_us' => $message->id]) }}" class="btn btn-primary ms-1">نمایش</a>
                         <form action="{{ route('contact.destroy',['contact_us' => $message->id]) }}" method="post">
                             @csrf
                             @method('delete')

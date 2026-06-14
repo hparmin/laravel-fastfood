@@ -47,8 +47,8 @@ Route::group(['prefix'=> 'contact_us'], function (){
     Route::post('/store',[ContactUsController::class,'store'])->name('contact.store');
     Route::get('/',[ContactUsController::class,'index'])->name('contact.index');
     Route::get('/all',[ContactUsController::class,'showall'])->name('contact.showall');
-    Route::get('/{contact}/show',[ContactUsController::class,'show'])->name('contact.show');
     Route::delete('/{contact_us}',[ContactUsController::class,'destroy'])->name('contact.destroy');
+    Route::get('/{contact_us}/show',[ContactUsController::class,'show'])->name('contact.show');
 //    Route::put('/{about}',[AboutUsController::class,'update'])->name('about.update');
 });
 
