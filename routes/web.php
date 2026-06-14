@@ -8,6 +8,7 @@ use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactUsController;
 use \App\Http\Controllers\FooterController;
 use \App\Http\Controllers\CategoryController;
+use \App\Http\Controllers\ProductController;
 
 
 // app routes
@@ -60,7 +61,7 @@ Route::group(['prefix'=> 'footer'], function (){
     Route::put('/{footer}/update',[FooterController::class,'update'])->name('footer.update');
 });
 
-// the footer
+// the categories
 Route::group(['prefix'=> 'categories'], function (){
     Route::get('/',[CategoryController::class,'index'])->name('categories.index');
     Route::get('/create',[CategoryController::class,'create'])->name('categories.create');
@@ -68,4 +69,15 @@ Route::group(['prefix'=> 'categories'], function (){
     Route::delete('/{category}/destroy',[CategoryController::class,'destroy'])->name('category.destroy');
     Route::get('/{category}/edit',[CategoryController::class,'edit'])->name('category.edit');
     Route::put('/{category}/update',[CategoryController::class,'update'])->name('category.update');
+});
+
+// the products
+Route::group(['prefix'=> 'products'], function (){
+    Route::get('/',[ProductController::class,'index'])->name('products.index');
+    Route::get('/create',[ProductController::class,'create'])->name('products.create');
+    Route::get('/{product}',[ProductController::class,'create'])->name('products.create');
+    Route::post('/store',[ProductController::class,'store'])->name('products.store');
+    Route::delete('/{category}/destroy',[ProductController::class,'destroy'])->name('products.destroy');
+    Route::get('/{category}/edit',[ProductController::class,'edit'])->name('products.edit');
+    Route::put('/{category}/update',[ProductController::class,'update'])->name('products.update');
 });
