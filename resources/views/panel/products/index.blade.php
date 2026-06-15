@@ -8,7 +8,7 @@
             <a href="{{ route('products.trash') }}" class="ms-2 btn btn-sm btn-outline-danger">سلط زباله</a>
         </div>
     </div>
-    <div class="table-responsive">
+    <div class="table-responsive mb-5">
         <table class="table features align-middle">
             <thead>
             <tr>

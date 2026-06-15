@@ -8,12 +8,13 @@ use App\Models\ProductImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = product::paginate(5);
+        $products = product::latest('created_at')->paginate(5);
         return view('panel.products.index', compact('products'));
     }
 
@@ -64,7 +65,7 @@ class ProductController extends Controller
         $fileNameImages = [];
         if ($request->has('images') && $request->images !== null) {
             foreach ($request->images as $image) {
-                $fileNameImage = $product->id.'-'.Carbon::now()->microsecond . '-' . $image->getClientOriginalName();
+                $fileNameImage = $product->id . '-' . Carbon::now()->microsecond . '-' . $image->getClientOriginalName();
                 $image->storeAs('images/products/', $fileNameImage);
                 array_push($fileNameImages, $fileNameImage);
             }
@@ -85,30 +86,39 @@ class ProductController extends Controller
 
     public function show(product $product)
     {
-        return view('panel.products.show',compact('product'));
+        return view('panel.products.show', compact('product'));
     }
+
     public function destroy(product $product)
     {
         $product->delete();
-        return redirect()->route('products.index')->with('warning','محصول به سلط زباله منتقل شد.');
+        return redirect()->route('products.index')->with('warning', 'محصول به سلط زباله منتقل شد.');
     }
+
     public function trash()
     {
         $trashed_products = Product::onlyTrashed()->latest('deleted_at')->paginate(10);
-        return view('panel.products.trashed',compact('trashed_products'));
+        return view('panel.products.trashed', compact('trashed_products'));
     }
+
     public function recovery($product_id)
     {
         $product = product::withTrashed()->find($product_id);
         $product->restore();
-        return redirect()->route('products.trash')->with('success','محصول یازیابی شد.');
+        return redirect()->route('products.trash')->with('success', 'محصول یازیابی شد.');
     }
 
     public function hard_delete($product_id)
     {
         $product = product::withTrashed()->find($product_id);
+
+        foreach ($product->images as $image) {
+            Storage::delete('/images/products/' . $image->image);
+        }
+        Storage::delete('/images/products/' . $product->primary_image);
+
         $product->forceDelete();
-        return redirect()->route('products.trash')->with('warning','محصول به طور کامل حذف شد.');
+        return redirect()->route('products.trash')->with('warning', 'محصول به طور کامل حذف شد.');
     }
 
 

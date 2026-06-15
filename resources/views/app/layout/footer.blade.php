@@ -1,3 +1,7 @@
+@php
+    use App\Models\footer;
+    $footer = footer::first();
+@endphp
 <footer class="footer_section">
     <div class="container">
         <div class="row">
