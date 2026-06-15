@@ -2,10 +2,9 @@
 @section('title','محصولات')
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-5">
-        <h4 class="fw-bold">محصولات</h4>
+        <h4 class="fw-bold">محصولات حذف شده</h4>
         <div class="d-flex">
-            <a href="{{ route('products.create') }}" class="ms-2 btn btn-sm btn-outline-primary">ایجاد محصول</a>
-            <a href="{{ route('products.trash') }}" class="ms-2 btn btn-sm btn-outline-danger">سلط زباله</a>
+            <a href="{{ route('products.index') }}" class="ms-2 btn btn-sm btn-outline-primary">بازگشت</a>
         </div>
     </div>
     <div class="table-responsive">
@@ -22,7 +21,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($products as $product)
+            @foreach($trashed_products as $product)
                 <tr>
                     <td><img width="100px" style="max-height: 80px" class="rounded"
                              src="{{ asset('images/products/'.$product->primary_image )}}" alt="{{ $product->name }}">
@@ -35,21 +34,19 @@
                     <td>{{ $product->quantity }}</td>
                     <td>{{ $product->status == 1 ? 'فعال' : 'غیر فعال' }}</td>
                     <td class="d-flex">
-                        <a href="{{ route('products.show',['product' => $product->id]) }}"
-                           class="btn btn-outline-primary ms-1">نمایش</a>
-                        <a href="{{ route('products.edit',['product' => $product->id]) }}"
-                           class="btn btn-outline-info ms-1">ویرایش</a>
-                        <form class="ms-1" action="{{ route('products.destroy',['product' => $product->id]) }}"
+                        <a href="{{ route('products.recovery',['product_id' => $product->id]) }}"
+                           class="btn btn-outline-info ms-1">بازیابی</a>
+                        <form class="ms-1" action="{{ route('products.hard.delete',['product_id' => $product->id]) }}"
                               method="post">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">حذف</button>
+                            <button type="submit" class="btn btn-danger">حذف کامل</button>
                         </form>
                     </td>
                 </tr>
             @endforeach
             </tbody>
         </table>
-        {{ $products->links('panel.layout.paginate') }}
+        {{ $trashed_products->links('panel.layout.paginate') }}
     </div>
 @endsection

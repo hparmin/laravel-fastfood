@@ -75,9 +75,12 @@ Route::group(['prefix'=> 'categories'], function (){
 Route::group(['prefix'=> 'products'], function (){
     Route::get('/',[ProductController::class,'index'])->name('products.index');
     Route::get('/create',[ProductController::class,'create'])->name('products.create');
-    Route::get('/{product}',[ProductController::class,'create'])->name('products.create');
+    Route::get('/trash',[ProductController::class,'trash'])->name('products.trash');
+    Route::get('/{product_id}/recovery',[ProductController::class,'recovery'])->name('products.recovery');
     Route::post('/store',[ProductController::class,'store'])->name('products.store');
+    Route::get('/{product}',[ProductController::class,'show'])->name('products.show');
     Route::delete('/{product}',[ProductController::class,'destroy'])->name('products.destroy');
+    Route::delete('/{product_id}/hard_delete',[ProductController::class,'hard_delete'])->name('products.hard.delete');
     Route::get('/{product}/edit',[ProductController::class,'edit'])->name('products.edit');
     Route::put('/{product}/update',[ProductController::class,'update'])->name('products.update');
 });

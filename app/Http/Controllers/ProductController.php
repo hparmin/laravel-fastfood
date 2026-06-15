@@ -13,7 +13,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = product::paginate(3);
+        $products = product::paginate(5);
         return view('panel.products.index', compact('products'));
     }
 
@@ -55,7 +55,7 @@ class ProductController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'quantity' => $request->quantity,
-            'sale_price' => $request->has('sale_price') ? $request->sale_price : 0,
+            'sale_price' => $request->sale_price !== null ? $request->sale_price : 0,
             'date_on_sale_from' => $request->date_on_sale_from !== null ? getMiladiDate($request->date_on_sale_from) : null,
             'date_on_sale_to' => $request->date_on_sale_to !== null ? getMiladiDate($request->date_on_sale_to) : null
         ]);
@@ -64,7 +64,7 @@ class ProductController extends Controller
         $fileNameImages = [];
         if ($request->has('images') && $request->images !== null) {
             foreach ($request->images as $image) {
-                $fileNameImage = Carbon::now()->microsecond . '-' . $image->getClientOriginalName();
+                $fileNameImage = $product->id.'-'.Carbon::now()->microsecond . '-' . $image->getClientOriginalName();
                 $image->storeAs('images/products/', $fileNameImage);
                 array_push($fileNameImages, $fileNameImage);
             }
@@ -82,6 +82,35 @@ class ProductController extends Controller
 
         return redirect()->back()->with('success', 'بالاخره پست با موفقیت منتشر شد.');
     }
+
+    public function show(product $product)
+    {
+        return view('panel.products.show',compact('product'));
+    }
+    public function destroy(product $product)
+    {
+        $product->delete();
+        return redirect()->route('products.index')->with('warning','محصول به سلط زباله منتقل شد.');
+    }
+    public function trash()
+    {
+        $trashed_products = Product::onlyTrashed()->latest('deleted_at')->paginate(10);
+        return view('panel.products.trashed',compact('trashed_products'));
+    }
+    public function recovery($product_id)
+    {
+        $product = product::withTrashed()->find($product_id);
+        $product->restore();
+        return redirect()->route('products.trash')->with('success','محصول یازیابی شد.');
+    }
+
+    public function hard_delete($product_id)
+    {
+        $product = product::withTrashed()->find($product_id);
+        $product->forceDelete();
+        return redirect()->route('products.trash')->with('warning','محصول به طور کامل حذف شد.');
+    }
+
 
     public function makeSlug($sting)
     {
