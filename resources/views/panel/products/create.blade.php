@@ -162,7 +162,7 @@
             </button>
         </div>
     </form>
-    <a href="{{ route('categories.index') }}" class="btn btn-outline-danger mb-5">
+    <a href="{{ route('products.index') }}" class="btn btn-outline-danger mb-5">
         بازگشت
     </a>
 

@@ -4,11 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\category;
 use App\Models\product;
+use App\Models\ProductImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
+    public function index()
+    {
+        $products = product::paginate(3);
+        return view('panel.products.index', compact('products'));
+    }
+
     public function create()
     {
         $categories = category::all();
@@ -36,17 +44,10 @@ class ProductController extends Controller
         $primaryImageName = Carbon::now()->microsecond . '-' . $request->primary_image->getClientOriginalName();
         $request->primary_image->storeAs('images/products/', $primaryImageName);
 
-        // other pictures:
-        $fileNameImages = [];
-        if ($request->has('images') && $request->images != null){
-            foreach ($request->images as $image){
-                $fileNameImage = Carbon::now()->microsecond . '-' . $image->getClientOriginalName();
-                $image->storeAs('images/products/', $fileNameImage);
-            }
-            array_push($fileNameImages, $fileNameImage);
-        }
 
-        product::create([
+        DB::beginTransaction();
+
+        $product = product::create([
             'primary_image' => $primaryImageName,
             'name' => $request->name,
             'slug' => $slug,
@@ -55,17 +56,38 @@ class ProductController extends Controller
             'price' => $request->price,
             'quantity' => $request->quantity,
             'sale_price' => $request->has('sale_price') ? $request->sale_price : 0,
-            'date_on_sale_from' => $request->date_on_sale_from  !== null ? getMiladiDate($request->date_on_sale_from) : null,
+            'date_on_sale_from' => $request->date_on_sale_from !== null ? getMiladiDate($request->date_on_sale_from) : null,
             'date_on_sale_to' => $request->date_on_sale_to !== null ? getMiladiDate($request->date_on_sale_to) : null
         ]);
-        return redirect()->back()->with('success','بالاخره پست با موفقیت منتشر شد.');
+
+        // other pictures:
+        $fileNameImages = [];
+        if ($request->has('images') && $request->images !== null) {
+            foreach ($request->images as $image) {
+                $fileNameImage = Carbon::now()->microsecond . '-' . $image->getClientOriginalName();
+                $image->storeAs('images/products/', $fileNameImage);
+                array_push($fileNameImages, $fileNameImage);
+            }
+        }
+        if ($request->has('images') && $request->images !== null) {
+            foreach ($fileNameImages as $fileNameImage) {
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image' => $fileNameImage,
+                ]);
+            }
+        }
+
+        DB::commit();
+
+        return redirect()->back()->with('success', 'بالاخره پست با موفقیت منتشر شد.');
     }
 
     public function makeSlug($sting)
     {
         $slug = slugify($sting);
         $count = product::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
-        $result = $count ? $slug."-".$count : $slug;
+        $result = $count ? $slug . "-" . $count : $slug;
         return $result;
     }
 

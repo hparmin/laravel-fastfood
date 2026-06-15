@@ -77,7 +77,7 @@ Route::group(['prefix'=> 'products'], function (){
     Route::get('/create',[ProductController::class,'create'])->name('products.create');
     Route::get('/{product}',[ProductController::class,'create'])->name('products.create');
     Route::post('/store',[ProductController::class,'store'])->name('products.store');
-    Route::delete('/{category}/destroy',[ProductController::class,'destroy'])->name('products.destroy');
-    Route::get('/{category}/edit',[ProductController::class,'edit'])->name('products.edit');
-    Route::put('/{category}/update',[ProductController::class,'update'])->name('products.update');
+    Route::delete('/{product}',[ProductController::class,'destroy'])->name('products.destroy');
+    Route::get('/{product}/edit',[ProductController::class,'edit'])->name('products.edit');
+    Route::put('/{product}/update',[ProductController::class,'update'])->name('products.update');
 });
