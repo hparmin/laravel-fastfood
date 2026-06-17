@@ -41,12 +41,10 @@ class ProductController extends Controller
         // using our helper function slugify:
         $slug = $this->makeSlug($request->name);
 
+        DB::beginTransaction();
+
         // main picture:
         $primaryImageName = Carbon::now()->microsecond . '-' . $request->primary_image->getClientOriginalName();
-        $request->primary_image->storeAs('images/products/', $primaryImageName);
-
-
-        DB::beginTransaction();
 
         $product = product::create([
             'primary_image' => $primaryImageName,
@@ -60,6 +58,9 @@ class ProductController extends Controller
             'date_on_sale_from' => $request->date_on_sale_from !== null ? getMiladiDate($request->date_on_sale_from) : null,
             'date_on_sale_to' => $request->date_on_sale_to !== null ? getMiladiDate($request->date_on_sale_to) : null
         ]);
+
+        // ذخیره تصویر را بعد از ایجاد رکورد انجام میدهیم که اگر به هر دلیلی رکورد ایجاد نشد تصویر هم ذخیره نشود
+        $request->primary_image->storeAs('images/products/', $primaryImageName);
 
         // other pictures:
         $fileNameImages = [];
@@ -132,14 +133,12 @@ class ProductController extends Controller
         $categories = category::all();
         return view('panel.products.edit', compact('product','categories'));
     }
-
     public function recovery($product_id)
     {
         $product = product::withTrashed()->find($product_id);
         $product->restore();
         return redirect()->route('products.trash')->with('success', 'محصول یازیابی شد.');
     }
-
     public function hard_delete($product_id)
     {
         $product = product::withTrashed()->find($product_id);
@@ -152,14 +151,43 @@ class ProductController extends Controller
         $product->forceDelete();
         return redirect()->route('products.trash')->with('warning', 'محصول به طور کامل حذف شد.');
     }
-
-    public function makeSlug($sting)
+    public function makeSlug($string)
     {
-        $slug = slugify($sting);
-        $count = product::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
-        $result = $count ? $slug . "-" . $count : $slug;
-        return $result;
+        $slug = slugify($string);
+
+        $slugs = Product::withTrashed()
+            ->where('slug', $slug)
+            ->orWhere('slug', 'LIKE', $slug . '-%')
+            ->pluck('slug')
+            ->toArray();
+
+        if (!in_array($slug, $slugs)) {
+            return $slug;
+        }
+
+        $max = 0;
+
+        foreach ($slugs as $existingSlug) {
+            if (preg_match('/^' . preg_quote($slug, '/') . '-([0-9]+)$/', $existingSlug, $matches)) {
+                $number = (int) $matches[1];
+
+                if ($number > $max) {
+                    $max = $number;
+                }
+            }
+        }
+        return $slug . '-' . ($max + 1);
     }
 
+    // فانکشن دارای مشکل:
+    // مشکلی اول: اگر محصولی سافت دلیت شده باشد اسلاگ تکراری خواهد شد
+    // مشکل دوم: اگر سه محصول با نام تکراری منتشر شود و محصولی به غیر از آخری حذف کامل شود، باز هم اسلاگ با آخری تکراری خواهد شد.
+//    public function makeSlug($sting)
+//    {
+//        $slug = slugify($sting);
+//        $count = product::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+//        $result = $count ? $slug . "-" . $count : $slug;
+//        return $result;
+//    }
 
 }
