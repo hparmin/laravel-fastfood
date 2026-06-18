@@ -2,7 +2,10 @@
     use App\Models\category;
 
     //دستور زیر کتیگوری های فعال و محصولات متعلق به اون ها رو برمیگردونه:
-    $categories = Category::where('status', 1)->with('products')->get();
+    $categories = Category::where('status', 1)->with(['products' => function ($query) {
+        $query->where('status', 1);
+//              ->where('quantity', '>', 0);
+    }])->get();
 //    foreach ($categories as $category) {
 //    echo "<h1>{$category->name}</h1>";
 //        foreach ($category->products as $product) {
@@ -35,8 +38,8 @@
                         continue;
                     }
                 @endphp
-                    <li :class="tab === {{ $loop->index + 1 }} ? 'active' : ''"
-                        @click="tab = {{ $loop->index + 1 }}">{{ $category->name }}</li>
+                <li :class="tab === {{ $loop->index + 1 }} ? 'active' : ''"
+                    @click="tab = {{ $loop->index + 1 }}">{{ $category->name }}</li>
             @endforeach
         </ul>
         <div class="filters-content">
@@ -56,7 +59,9 @@
                                     <div class="box">
                                         <div>
                                             <div class="img-box">
-                                                <img class="img-fluid" src="{{ asset('images/products/'.$product->primary_image) }}" alt="">
+                                                <img class="img-fluid"
+                                                     src="{{ asset('images/products/'.$product->primary_image) }}"
+                                                     alt="">
                                             </div>
                                             <div class="detail-box">
                                                 <h5>
@@ -66,14 +71,25 @@
                                                     {{ $product->description }}
                                                 </p>
                                                 <div class="options">
-                                                    <h6>
-                                                        <del>{{ $product->price }}</del>
-                                                        <span>
-                                                    <span class="text-danger">(16%)</span>
-                                                    {{ $product->sale_price }}
-                                                    <span>تومان</span>
-                                                </span>
-                                                    </h6>
+                                                    @if($product->is_sale)
+                                                        <h6>
+                                                            <del>{{ $product->price }}</del>
+                                                            <span>
+                                                                @php
+                                                                    $off_percantage = 100-($product->sale_price * 100 / $product->price);
+                                                                @endphp
+                                                                <span
+                                                                    class="text-danger">({{round($off_percantage)}}%)</span>
+                                                                {{ $product->sale_price }}
+                                                                <span>تومان</span>
+                                                            </span>
+                                                        </h6>
+                                                    @else
+                                                        <h6>
+                                                            {{ $product->price }}
+                                                            <span>تومان</span>
+                                                        </h6>
+                                                    @endif
                                                     <div class="d-flex">
                                                         <a class="me-2" href="">
                                                             <i class="bi bi-cart-fill text-white fs-6"></i>
