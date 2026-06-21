@@ -9,84 +9,91 @@ use App\Http\Controllers\ContactUsController;
 use \App\Http\Controllers\FooterController;
 use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\ProductController;
+use \App\Http\Controllers\AuthController;
 
 
 // app routes
-Route::get('/',[HomeController::class,'index'])->name('home');
-Route::get('/about-us', [AboutUsController::class,'show'])->name('app.about-us');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about-us', [AboutUsController::class, 'show'])->name('app.about-us');
 
 
 // panel routes:
-Route::get('/panel', function () { return view('panel.index');})->name('panel.index');
+Route::get('/panel', function () {
+    return view('panel.index');
+})->name('panel.index');
 // the slider:
-Route::group(['prefix'=> 'sliders'], function (){
-    Route::get('/create',[SlidersController::class,'create'])->name('slider.create');
-    Route::post('/store',[SlidersController::class,'store'])->name('slider.store');
-    Route::get('/',[SlidersController::class,'index'])->name('slider.index');
-    Route::get('/{slider}/edit',[SlidersController::class,'edit'])->name('slider.edit');
-    Route::put('/{slider}',[SlidersController::class,'update'])->name('slider.update');
-    Route::delete('/{slider}',[SlidersController::class,'destroy'])->name('slider.destroy');
+Route::group(['prefix' => 'sliders'], function () {
+    Route::get('/create', [SlidersController::class, 'create'])->name('slider.create');
+    Route::post('/store', [SlidersController::class, 'store'])->name('slider.store');
+    Route::get('/', [SlidersController::class, 'index'])->name('slider.index');
+    Route::get('/{slider}/edit', [SlidersController::class, 'edit'])->name('slider.edit');
+    Route::put('/{slider}', [SlidersController::class, 'update'])->name('slider.update');
+    Route::delete('/{slider}', [SlidersController::class, 'destroy'])->name('slider.destroy');
 });
 // the feature
-Route::group(['prefix'=> 'feature'], function (){
-    Route::get('/create',[FeatureController::class,'create'])->name('feature.create');
-    Route::post('/store',[FeatureController::class,'store'])->name('feature.store');
-    Route::get('/',[FeatureController::class,'index'])->name('feature.index');
-    Route::get('/{feature}/edit',[FeatureController::class,'edit'])->name('feature.edit');
-    Route::put('/{feature}',[FeatureController::class,'update'])->name('feature.update');
-    Route::delete('/{feature}',[FeatureController::class,'destroy'])->name('feature.destroy');
+Route::group(['prefix' => 'feature'], function () {
+    Route::get('/create', [FeatureController::class, 'create'])->name('feature.create');
+    Route::post('/store', [FeatureController::class, 'store'])->name('feature.store');
+    Route::get('/', [FeatureController::class, 'index'])->name('feature.index');
+    Route::get('/{feature}/edit', [FeatureController::class, 'edit'])->name('feature.edit');
+    Route::put('/{feature}', [FeatureController::class, 'update'])->name('feature.update');
+    Route::delete('/{feature}', [FeatureController::class, 'destroy'])->name('feature.destroy');
 });
 
 // the aboutUs
-Route::group(['prefix'=> 'about'], function (){
-    Route::get('/',[AboutUsController::class,'index'])->name('about.index');
-    Route::get('/{about}/edit',[AboutUsController::class,'edit'])->name('about.edit');
-    Route::put('/{about}',[AboutUsController::class,'update'])->name('about.update');
+Route::group(['prefix' => 'about'], function () {
+    Route::get('/', [AboutUsController::class, 'index'])->name('about.index');
+    Route::get('/{about}/edit', [AboutUsController::class, 'edit'])->name('about.edit');
+    Route::put('/{about}', [AboutUsController::class, 'update'])->name('about.update');
 });
 
 // the ContactUs
-Route::group(['prefix'=> 'contact_us'], function (){
-    Route::post('/store',[ContactUsController::class,'store'])->name('contact.store');
-    Route::get('/',[ContactUsController::class,'index'])->name('contact.index');
-    Route::get('/all',[ContactUsController::class,'showall'])->name('contact.showall');
-    Route::delete('/{contact_us}',[ContactUsController::class,'destroy'])->name('contact.destroy');
-    Route::get('/{contact_us}/show',[ContactUsController::class,'show'])->name('contact.show');
+Route::group(['prefix' => 'contact_us'], function () {
+    Route::post('/store', [ContactUsController::class, 'store'])->name('contact.store');
+    Route::get('/', [ContactUsController::class, 'index'])->name('contact.index');
+    Route::get('/all', [ContactUsController::class, 'showall'])->name('contact.showall');
+    Route::delete('/{contact_us}', [ContactUsController::class, 'destroy'])->name('contact.destroy');
+    Route::get('/{contact_us}/show', [ContactUsController::class, 'show'])->name('contact.show');
 //    Route::put('/{about}',[AboutUsController::class,'update'])->name('about.update');
 });
 
 // the footer
-Route::group(['prefix'=> 'footer'], function (){
-    Route::get('/settings',[FooterController::class,'index'])->name('footer.index');
-    Route::get('/edit',[FooterController::class,'edit'])->name('footer.edit');
-    Route::put('/{footer}/update',[FooterController::class,'update'])->name('footer.update');
+Route::group(['prefix' => 'footer'], function () {
+    Route::get('/settings', [FooterController::class, 'index'])->name('footer.index');
+    Route::get('/edit', [FooterController::class, 'edit'])->name('footer.edit');
+    Route::put('/{footer}/update', [FooterController::class, 'update'])->name('footer.update');
 });
 
 // the categories
-Route::group(['prefix'=> 'categories'], function (){
-    Route::get('/',[CategoryController::class,'index'])->name('categories.index');
-    Route::get('/create',[CategoryController::class,'create'])->name('categories.create');
-    Route::post('/store',[CategoryController::class,'store'])->name('categories.store');
-    Route::delete('/{category}/destroy',[CategoryController::class,'destroy'])->name('category.destroy');
-    Route::get('/{category}/edit',[CategoryController::class,'edit'])->name('category.edit');
-    Route::put('/{category}/update',[CategoryController::class,'update'])->name('category.update');
+Route::group(['prefix' => 'categories'], function () {
+    Route::get('/', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/store', [CategoryController::class, 'store'])->name('categories.store');
+    Route::delete('/{category}/destroy', [CategoryController::class, 'destroy'])->name('category.destroy');
+    Route::get('/{category}/edit', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::put('/{category}/update', [CategoryController::class, 'update'])->name('category.update');
 });
 
 // the products
-Route::group(['prefix'=> 'products'], function (){
+Route::group(['prefix' => 'products'], function () {
     // panel
-    Route::get('/',[ProductController::class,'index'])->name('products.index');
-    Route::get('/create',[ProductController::class,'create'])->name('products.create');
-    Route::get('/trash',[ProductController::class,'trash'])->name('products.trash');
-    Route::get('/{product_id}/recovery',[ProductController::class,'recovery'])->name('products.recovery');
-    Route::post('/store',[ProductController::class,'store'])->name('products.store');
-    Route::get('/{product}',[ProductController::class,'show'])->name('products.show');
-    Route::delete('/{product}',[ProductController::class,'destroy'])->name('products.destroy');
-    Route::delete('/{product_id}/hard_delete',[ProductController::class,'hard_delete'])->name('products.hard.delete');
-    Route::get('/{product}/edit',[ProductController::class,'edit'])->name('products.edit');
-    Route::put('/{product}/update',[ProductController::class,'update'])->name('products.update');
+    Route::get('/', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+    Route::get('/trash', [ProductController::class, 'trash'])->name('products.trash');
+    Route::get('/{product_id}/recovery', [ProductController::class, 'recovery'])->name('products.recovery');
+    Route::post('/store', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::delete('/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::delete('/{product_id}/hard_delete', [ProductController::class, 'hard_delete'])->name('products.hard.delete');
+    Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/{product}/update', [ProductController::class, 'update'])->name('products.update');
 
     // app
-    Route::get('/single/{product:slug}',[ProductController::class,'single'])->name('products.single');
+    Route::get('/single/{product:slug}', [ProductController::class, 'single'])->name('products.single');
 });
 
-Route::get('/menu',[ProductController::class,'menu'])->name('products.menu');
+Route::get('/menu', [ProductController::class, 'menu'])->name('products.menu');
+Route::get('/login', [AuthController::class, 'loginForm'])->name('auth.loginform');
+Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('/check-otp', [AuthController::class, 'checkOtp'])->name('auth.checkotp');
+Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('auth.resendOtp');

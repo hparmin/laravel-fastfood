@@ -64,9 +64,16 @@
                                         3
                                     </span>
                             </a>
+                            @auth()
                             <a href="{{ route('panel.index') }}" class="btn-auth">
                                 حساب کاربری
                             </a>
+                            @endauth
+                            @guest()
+                                <a href="{{ route('auth.login') }}" class="btn-auth">
+                                    ورود
+                                </a>
+                            @endguest
                         </div>
                     </div>
                 </nav>
