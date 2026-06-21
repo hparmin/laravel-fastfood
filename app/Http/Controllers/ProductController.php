@@ -179,15 +179,21 @@ class ProductController extends Controller
         return $slug . '-' . ($max + 1);
     }
 
-    // فانکشن دارای مشکل:
-    // مشکلی اول: اگر محصولی سافت دلیت شده باشد اسلاگ تکراری خواهد شد
-    // مشکل دوم: اگر سه محصول با نام تکراری منتشر شود و محصولی به غیر از آخری حذف کامل شود، باز هم اسلاگ با آخری تکراری خواهد شد.
-//    public function makeSlug($sting)
+    //app
+    public function single(product $product)
+    {
+        $random_product = product::where('quantity', '>' , 0)->where('status',1)->get()->random(4);
+        return view('app.product.single',compact('product','random_product'));
+    }
+//    public function menu()
 //    {
-//        $slug = slugify($sting);
-//        $count = product::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
-//        $result = $count ? $slug . "-" . $count : $slug;
-//        return $result;
+//        $products = product::latest('created_at')->where('quantity', '>' , 0)->paginate(9);
+//        return view('app.product.menu',compact('products'));
 //    }
+    public function menu(Request $request){
+        $categories = Category::all();
+        $products = Product::where('quantity', '>', 0)->where('status', 1)->search($request->search)->filter()->paginate(9);
+        return view('app.product.menu', compact('products', 'categories'));
+    }
 
 }

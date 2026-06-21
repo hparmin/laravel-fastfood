@@ -73,6 +73,7 @@ Route::group(['prefix'=> 'categories'], function (){
 
 // the products
 Route::group(['prefix'=> 'products'], function (){
+    // panel
     Route::get('/',[ProductController::class,'index'])->name('products.index');
     Route::get('/create',[ProductController::class,'create'])->name('products.create');
     Route::get('/trash',[ProductController::class,'trash'])->name('products.trash');
@@ -83,4 +84,9 @@ Route::group(['prefix'=> 'products'], function (){
     Route::delete('/{product_id}/hard_delete',[ProductController::class,'hard_delete'])->name('products.hard.delete');
     Route::get('/{product}/edit',[ProductController::class,'edit'])->name('products.edit');
     Route::put('/{product}/update',[ProductController::class,'update'])->name('products.update');
+
+    // app
+    Route::get('/single/{product:slug}',[ProductController::class,'single'])->name('products.single');
 });
+
+Route::get('/menu',[ProductController::class,'menu'])->name('products.menu');
