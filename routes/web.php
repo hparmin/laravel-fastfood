@@ -93,7 +93,12 @@ Route::group(['prefix' => 'products'], function () {
 });
 
 Route::get('/menu', [ProductController::class, 'menu'])->name('products.menu');
-Route::get('/login', [AuthController::class, 'loginForm'])->name('auth.loginform');
-Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
-Route::post('/check-otp', [AuthController::class, 'checkOtp'])->name('auth.checkotp');
-Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('auth.resendOtp');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'loginForm'])->name('auth.loginform');
+    Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('/check-otp', [AuthController::class, 'checkOtp'])->name('auth.checkotp');
+    Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('auth.resendOtp');
+});
+
+Route::get('/test', function (){return "hellow"; })->name('test')->middleware('auth');

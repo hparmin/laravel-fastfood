@@ -43,8 +43,6 @@ class AuthController extends Controller
                     'login_token' => $loginToken,
                 ]);
             }
-
-
 //           connect to Ghasedaksms:
 //            $response = GhasedaksmsFacade::sendOtp(new OtpMessageDTO(
 //                sendDate: Carbon::now(),
@@ -88,7 +86,6 @@ class AuthController extends Controller
         } catch (\Exception $ex) {
 
         }
-
     }
 
     public function resendOtp(Request $request)
@@ -96,24 +93,24 @@ class AuthController extends Controller
         $request->validate([
             'login_token' => 'required'
         ]);
-
-        try {
-            $user = User::where('login_token', $request->login_token)->first();
-            $user_cellphone = $user->cellphone;
-            $otp = $user->otp;
-            $response = GhasedaksmsFacade::sendOtp(new OtpMessageDTO(
-                sendDate: Carbon::now(),
-                receptors: [new ReceptorDTO(
-                    mobile: $user_cellphone,
-                    clientReferenceId: 'ref-1',
+        $user = User::where('login_token', $request->login_token)->firstOrFail();
+        if ($user) {
+            try {
+                $user_cellphone = $user->cellphone;
+                $otp = mt_rand(100000, 999999);
+                $response = GhasedaksmsFacade::sendOtp(new OtpMessageDTO(
+                    sendDate: Carbon::now(),
+                    receptors: [new ReceptorDTO(
+                        mobile: $user_cellphone,
+                        clientReferenceId: 'ref-1',
 //                    clientReferenceId: '$user'
-                )],
-                templateName: 'laravel', // نام قالب در پنل
-                inputs: [new InputDTO(param: 'code', value: $otp)],
-            ));
-        } catch (\Exception $ex) {
+                    )],
+                    templateName: 'laravel', // نام قالب در پنل
+                    inputs: [new InputDTO(param: 'code', value: $otp)],
+                ));
+            } catch (\Exception $ex) {
 
+            }
         }
-
     }
 }
