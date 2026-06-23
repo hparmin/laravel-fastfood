@@ -6,12 +6,6 @@
         $query->where('status', 1);
 //              ->where('quantity', '>', 0);
     }])->get();
-//    foreach ($categories as $category) {
-//    echo "<h1>{$category->name}</h1>";
-//        foreach ($category->products as $product) {
-//            echo $product->name . "<br>";
-//        }
-//    }
 @endphp
 @foreach($categories as $category)
     @php
@@ -19,7 +13,6 @@
             continue;
         }else{
             $loop_start = $loop->index+1;
-            echo $loop_start;
             break;
         }
     @endphp

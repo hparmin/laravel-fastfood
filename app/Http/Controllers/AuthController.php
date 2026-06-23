@@ -102,8 +102,8 @@ class AuthController extends Controller
                     sendDate: Carbon::now(),
                     receptors: [new ReceptorDTO(
                         mobile: $user_cellphone,
-                        clientReferenceId: 'ref-1',
-//                    clientReferenceId: '$user'
+//                        clientReferenceId: 'ref-1',
+                    clientReferenceId: '$user'
                     )],
                     templateName: 'laravel', // نام قالب در پنل
                     inputs: [new InputDTO(param: 'code', value: $otp)],

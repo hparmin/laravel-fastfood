@@ -1,5 +1,3 @@
-
-<!-- feature section -->
 <section class="card-area layout_padding">
     <div class="container">
         <div class="row gy-5">
@@ -21,4 +19,3 @@
         </div>
     </div>
 </section>
-<!-- end feature section -->

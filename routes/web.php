@@ -10,6 +10,7 @@ use \App\Http\Controllers\FooterController;
 use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\ProductController;
 use \App\Http\Controllers\AuthController;
+use \App\Http\Controllers\ProfileController;
 
 
 // app routes
@@ -58,7 +59,7 @@ Route::group(['prefix' => 'contact_us'], function () {
 });
 
 // the footer
-Route::group(['prefix' => 'footer'], function () {
+Route::middleware('auth')->prefix('footer')->group(function () {
     Route::get('/settings', [FooterController::class, 'index'])->name('footer.index');
     Route::get('/edit', [FooterController::class, 'edit'])->name('footer.edit');
     Route::put('/{footer}/update', [FooterController::class, 'update'])->name('footer.update');
@@ -75,23 +76,25 @@ Route::group(['prefix' => 'categories'], function () {
 });
 
 // the products
-Route::group(['prefix' => 'products'], function () {
-    // panel
+// panel
+Route::middleware('auth')->prefix('products')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('products.index');
     Route::get('/create', [ProductController::class, 'create'])->name('products.create');
     Route::get('/trash', [ProductController::class, 'trash'])->name('products.trash');
     Route::get('/{product_id}/recovery', [ProductController::class, 'recovery'])->name('products.recovery');
     Route::post('/store', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::get('/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::put('/{product}/update', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::delete('/{product_id}/hard_delete', [ProductController::class, 'hard_delete'])->name('products.hard.delete');
-    Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-    Route::put('/{product}/update', [ProductController::class, 'update'])->name('products.update');
-
-    // app
+});
+// app
+Route::prefix('products')->group(function () {
     Route::get('/single/{product:slug}', [ProductController::class, 'single'])->name('products.single');
 });
 
+// Restaurant Menu:
 Route::get('/menu', [ProductController::class, 'menu'])->name('products.menu');
 
 Route::middleware('guest')->group(function () {
@@ -102,3 +105,11 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::get('/test', function (){return "hellow"; })->name('test')->middleware('auth');
+
+
+// panel
+Route::middleware('auth')->prefix('profile')->group(function () {
+    Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/{user}', [ProfileController::class, 'update'])->name('profile.update');
+});
+
