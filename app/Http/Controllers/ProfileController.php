@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Province;
 use App\Models\User;
 use App\Models\UserAddress;
+use App\Models\wishlist;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -99,6 +100,14 @@ class ProfileController extends Controller
     {
         $address->delete();
         return redirect()->back()->with('success','آدرس مورد نظر حذف شد.');
+    }
+
+    public function showWishlist()
+    {
+        $user = auth()->user();
+
+        $wishlist = wishlist::query()->where('user_id',$user->id)->get();
+        return view('profile.wishlist.index',compact('wishlist'));
     }
 
 }

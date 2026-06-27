@@ -11,6 +11,7 @@ use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\ProductController;
 use \App\Http\Controllers\AuthController;
 use \App\Http\Controllers\ProfileController;
+use \App\Http\Controllers\WishListController;
 
 
 // app routes
@@ -119,5 +120,9 @@ Route::middleware('auth')->prefix('profile')->group(function () {
     Route::put('/{address}/update', [ProfileController::class, 'addressUpdate'])->name('addresses.Update');
     Route::post('/addresses', [ProfileController::class, 'addressStore'])->name('addresses.store');
     Route::delete('/{address}', [ProfileController::class, 'addressesDestroy'])->name('addresses.destroy');
+
+    Route::get('/wishlist', [ProfileController::class, 'showWishlist'])->name('wishlist.index');
 });
+Route::get('/add_to_wishlist', [WishListController::class, 'addToWishlist'])->name('addToWishlist');
+Route::get('/remove_from_wishlist', [WishListController::class, 'removeFromWishlist'])->name('removeFromWishlist');
 

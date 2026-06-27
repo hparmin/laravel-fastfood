@@ -13,7 +13,7 @@
             <a href="./transactions.html">تراکنش ها</a>
         </li>
         <li class="list-group-item">
-            <a href="#">لیست علاقه مندی ها</a>
+            <a href="{{ route('wishlist.index') }}">لیست علاقه مندی ها</a>
         </li>
         <li class="list-group-item">
             <a href="{{ route('auth.logout') }}">خروج</a>
