@@ -1,4 +1,4 @@
-@extends('app.layout.profile')
+@extends('profile.layout.master')
 @section('title','پنل کاربری')
 @section('profile.content')
     <div class="col-sm-12 col-lg-9">

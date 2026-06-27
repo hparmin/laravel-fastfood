@@ -65,7 +65,7 @@
                                     </span>
                             </a>
                             @auth()
-                            <a href="{{ route('panel.index') }}" class="btn-auth">
+                            <a href="{{ route('profile.index') }}" class="btn-auth">
                                 حساب کاربری
                             </a>
                             @endauth

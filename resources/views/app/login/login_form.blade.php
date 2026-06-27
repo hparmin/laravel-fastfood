@@ -136,7 +136,7 @@
                                     <div>
                                         <div class="mb-3">
                                             <label class="form-label">شماره موبایل</label>
-                                            <input type="text" x-model="cellphone" class="form-control mb-2" />
+                                            <input type="text" x-model="cellphone" class="form-control mb-2"/>
                                             <div class="form-text text-danger" x-text="error"></div>
                                         </div>
                                         <button @click="login()" type="submit" class="btn btn-primary btn-auth">ورود
@@ -150,14 +150,15 @@
                                     <div>
                                         <div class="mb-3">
                                             <label class="form-label">کد ورود</label>
-                                            <input type="text" x-model="otp" class="form-control mb-2" />
+                                            <input type="text" x-model="otp" class="form-control mb-2"/>
                                             <div class="form-text text-danger" x-text="error"></div>
                                         </div>
 
                                         <div class="d-flex justify-content-between align-items-baseline">
                                             <button @click="checkOtp()" type="submit"
                                                     class="btn btn-primary btn-auth">ارسال
-                                                <div x-show="loading" class="spinner-border spinner-border-sm ms-2"></div>
+                                                <div x-show="loading"
+                                                     class="spinner-border spinner-border-sm ms-2"></div>
                                             </button>
 
                                             <template x-if="seconds > 0 || minutes > 0">
@@ -168,7 +169,8 @@
                                             </template>
 
                                             <template x-if="seconds == 0 && minutes == 0">
-                                                <button @click="resendOtp" type="submit" class="btn btn-dark">ارسال دوباره
+                                                <button @click="resendOtp" type="submit" class="btn btn-dark">ارسال
+                                                    دوباره
                                                     <div x-show="loadingResend"
                                                          class="spinner-border spinner-border-sm ms-2"></div>
                                                 </button>

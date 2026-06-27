@@ -2,7 +2,7 @@
 <section class="profile_section layout_padding">
     <div class="container">
         <div class="row">
-            @include('app.profile.sidebar')
+            @include('profile.layout.sidebar')
             @yield('profile.content')
         </div>
     </div>

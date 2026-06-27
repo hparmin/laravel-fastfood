@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use mysql_xdevapi\Exception;
+use Illuminate\Support\Str;
 
 
 use Ghasedaksms\GhasedaksmsLaravel\GhasedaksmsFacade;
@@ -24,93 +25,149 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'cellphone' => ['required', 'regex:/^09[0|1|2|3][0-9]{8}$/']
+            'cellphone' => ['required', 'regex:/^09[0-9]{9}$/']
         ]);
-        $user = User::where('cellphone', $request->cellphone)->first();
-        $otp = mt_rand(100000, 999999);
-        $loginToken = Hash::make('cecQRV@@5$GAFS65@4VARTsaf**@gdsf');
 
         try {
+            $user = User::where('cellphone', $request->cellphone)->first();
+
+            $otp = mt_rand(100000, 999999);
+            $loginToken = Str::random(80);
+
             if ($user) {
                 $user->update([
                     'otp' => $otp,
                     'login_token' => $loginToken,
                 ]);
             } else {
-                $user = user::create([
+                $user = User::create([
                     'cellphone' => $request->cellphone,
                     'otp' => $otp,
                     'login_token' => $loginToken,
                 ]);
             }
-//           connect to Ghasedaksms:
+
 //            $response = GhasedaksmsFacade::sendOtp(new OtpMessageDTO(
 //                sendDate: Carbon::now(),
 //                receptors: [new ReceptorDTO(
 //                    mobile: $request->cellphone,
-//                    clientReferenceId: 'ref-1',
-////                    clientReferenceId: '$user'
+//                    clientReferenceId: 'ref-' . $user->id,
 //                )],
-//                templateName: 'laravel', // نام قالب در پنل
+//                templateName: 'laravel',
 //                inputs: [new InputDTO(param: 'code', value: $otp)],
 //            ));
 
-            return response()->json(['login_token' => $loginToken,
-//                'response' => $response
-            ],
-                200);
+            return response()->json([
+                'message' => 'کد ورود ارسال شد.',
+                'login_token' => $loginToken,
+            ], 200);
 
         } catch (\Exception $ex) {
-            return response()->json(['errors' => $ex->getMessage()], 500);
+            return response()->json([
+                'message' => 'خطا در ارسال کد ورود.',
+                'error' => $ex->getMessage(),
+            ], 500);
         }
     }
+
 
     public function checkOtp(Request $request)
     {
         $request->validate([
-            'otp' => 'required|int|digits:6',
-            'login_token' => 'required'
+            'otp' => ['required', 'integer', 'digits:6'],
+            'login_token' => ['required']
         ]);
 
         try {
             $user = User::where('login_token', $request->login_token)->first();
-            if ($user) {
-                if ($user->otp == $request->otp) {
-                    auth()->login($user, $remember = true);
-                    return response()->json(['message' => 'ورود با موفقیت انجام شد.'], 200);
-                } else {
-                    return response()->json(['message' => 'کد وورد نادرست است.'], 422);
-                    // wrong otp code
-                }
-            }
-        } catch (\Exception $ex) {
 
+            if (! $user) {
+                return response()->json([
+                    'message' => 'درخواست ورود نامعتبر است.'
+                ], 404);
+            }
+
+            if ($user->otp != $request->otp) {
+                return response()->json([
+                    'message' => 'کد ورود نادرست است.'
+                ], 422);
+            }
+
+            auth()->login($user, true);
+
+            $user->update([
+                'otp' => null,
+                'login_token' => null,
+            ]);
+
+            return response()->json([
+                'message' => 'ورود با موفقیت انجام شد.'
+            ], 200);
+
+        } catch (\Exception $ex) {
+            return response()->json([
+                'message' => 'خطا در بررسی کد ورود.',
+                'error' => $ex->getMessage(),
+            ], 500);
         }
     }
+
 
     public function resendOtp(Request $request)
     {
         $request->validate([
-            'login_token' => 'required'
+            'login_token' => ['required']
         ]);
-        $user = User::where('login_token', $request->login_token)->firstOrFail();
-        if ($user) {
-            try {
-                $user_cellphone = $user->cellphone;
-                $otp = mt_rand(100000, 999999);
-                $response = GhasedaksmsFacade::sendOtp(new OtpMessageDTO(
-                    sendDate: Carbon::now(),
-                    receptors: [new ReceptorDTO(
-                        mobile: $user_cellphone,
-//                        clientReferenceId: 'ref-1',
-                    clientReferenceId: '$user'
-                    )],
-                    templateName: 'laravel', // نام قالب در پنل
-                    inputs: [new InputDTO(param: 'code', value: $otp)],
-                ));
-            } catch (\Exception $ex) {
 
+        try {
+            $user = User::where('login_token', $request->login_token)->first();
+
+            if (! $user) {
+                return response()->json([
+                    'message' => 'درخواست نامعتبر است. لطفا دوباره تلاش کنید.'
+                ], 404);
             }
+
+            $otp = mt_rand(100000, 999999);
+
+//            $loginToken = Hash::make(Str::random(40));
+            $loginToken = Str::random(80);
+
+            $user->update([
+                'otp' => $otp,
+                'login_token' => $loginToken,
+            ]);
+
+            $response = GhasedaksmsFacade::sendOtp(new OtpMessageDTO(
+                sendDate: Carbon::now(),
+                receptors: [new ReceptorDTO(
+                    mobile: $user->cellphone,
+                    clientReferenceId: 'ref-' . $user->id,
+                )],
+                templateName: 'laravel',
+                inputs: [new InputDTO(param: 'code', value: $otp)],
+            ));
+
+            return response()->json([
+                'message' => 'کد ورود مجددا ارسال شد.',
+                'login_token' => $loginToken,
+            ], 200);
+
+        } catch (\Exception $ex) {
+            return response()->json([
+                'message' => 'خطا در ارسال مجدد کد ورود.',
+                'error' => $ex->getMessage(),
+            ], 500);
         }
+    }
+
+
+    public function logout(Request $request)
+    {
+        auth()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('home');
     }
 }

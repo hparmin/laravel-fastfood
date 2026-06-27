@@ -96,6 +96,7 @@ Route::prefix('products')->group(function () {
 
 // Restaurant Menu:
 Route::get('/menu', [ProductController::class, 'menu'])->name('products.menu');
+Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'loginForm'])->name('auth.loginform');
@@ -111,5 +112,12 @@ Route::get('/test', function (){return "hellow"; })->name('test')->middleware('a
 Route::middleware('auth')->prefix('profile')->group(function () {
     Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/{user}', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::get('/addresses', [ProfileController::class, 'addresses'])->name('profile.addresses');
+    Route::get('/addresses/create', [ProfileController::class, 'addressCreate'])->name('addresses.create');
+    Route::get('/{address}/edit', [ProfileController::class, 'addressEdit'])->name('addresses.edit');
+    Route::put('/{address}/update', [ProfileController::class, 'addressUpdate'])->name('addresses.Update');
+    Route::post('/addresses', [ProfileController::class, 'addressStore'])->name('addresses.store');
+    Route::delete('/{address}', [ProfileController::class, 'addressesDestroy'])->name('addresses.destroy');
 });
 

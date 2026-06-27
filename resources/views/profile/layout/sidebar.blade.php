@@ -4,7 +4,7 @@
             <a href="{{ route('profile.index') }}">اطلاعات کاربر</a>
         </li>
         <li class="list-group-item">
-            <a href="./addresses.html">آدرس ها</a>
+            <a href="{{ route('profile.addresses') }}">آدرس ها</a>
         </li>
         <li class="list-group-item">
             <a href="./orders.html">سفارشات</a>
@@ -16,7 +16,7 @@
             <a href="#">لیست علاقه مندی ها</a>
         </li>
         <li class="list-group-item">
-            <a href="#">خروج</a>
+            <a href="{{ route('auth.logout') }}">خروج</a>
         </li>
     </ul>
 </div>
