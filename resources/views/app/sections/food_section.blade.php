@@ -86,7 +86,7 @@
                                                         </h6>
                                                     @endif
                                                     <div class="d-flex">
-                                                        <a class="me-2" href="">
+                                                        <a class="me-2" href="{{ route('addToCart',['product_id' => $product->id]) }}">
                                                             <i class="bi bi-cart-fill text-white fs-6"></i>
                                                         </a>
                                                         <a href="{{ route('addToWishlist',['product_id' => $product->id]) }}">

@@ -12,6 +12,7 @@ use \App\Http\Controllers\ProductController;
 use \App\Http\Controllers\AuthController;
 use \App\Http\Controllers\ProfileController;
 use \App\Http\Controllers\WishListController;
+use \App\Http\Controllers\CartController;
 
 
 // app routes
@@ -127,3 +128,7 @@ Route::middleware('auth')->prefix('profile')->group(function () {
 
 Route::get('/add_to_wishlist', [WishListController::class, 'addToWishlist'])->name('addToWishlist');
 
+Route::prefix('cart')->group(function () {
+    Route::get('/add-to-cart', [CartController::class, 'increment'])->name('addToCart');
+    Route::get('/', [CartController::class, 'cart'])->name('cart');
+});

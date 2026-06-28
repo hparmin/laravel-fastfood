@@ -36,7 +36,7 @@
                             <form x-data="{ quantity : 1 }" action="#" class="mt-5 d-flex">
                                 <button class="btn-add">افزودن به سبد خرید</button>
                                 <div class="input-counter ms-4">
-                                    <span @click="quantity++" class="plus-btn">
+                                    <span @click="quantity < {{ $product->quantity }} && quantity++" class="plus-btn">
                                         +
                                     </span>
                                     <div class="input-number" x-text="quantity">1</div>
