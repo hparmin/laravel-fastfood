@@ -44,7 +44,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('removeFromWishlist',['product_id' => $item->product->id]) }}"
+                            <a href="{{ route('removeFromWishlist',['wishlist' => $item->id]) }}"
                                class="btn btn-primary">
                                 حذف
                             </a>

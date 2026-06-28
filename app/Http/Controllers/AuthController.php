@@ -70,7 +70,6 @@ class AuthController extends Controller
         }
     }
 
-
     public function checkOtp(Request $request)
     {
         $request->validate([
@@ -111,7 +110,6 @@ class AuthController extends Controller
             ], 500);
         }
     }
-
 
     public function resendOtp(Request $request)
     {
@@ -160,7 +158,6 @@ class AuthController extends Controller
             ], 500);
         }
     }
-
 
     public function logout(Request $request)
     {

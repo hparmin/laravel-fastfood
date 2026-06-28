@@ -122,7 +122,8 @@ Route::middleware('auth')->prefix('profile')->group(function () {
     Route::delete('/{address}', [ProfileController::class, 'addressesDestroy'])->name('addresses.destroy');
 
     Route::get('/wishlist', [ProfileController::class, 'showWishlist'])->name('wishlist.index');
+    Route::get('/remove_from_wishlist', [WishListController::class, 'removeFromWishlist'])->name('removeFromWishlist');
 });
+
 Route::get('/add_to_wishlist', [WishListController::class, 'addToWishlist'])->name('addToWishlist');
-Route::get('/remove_from_wishlist', [WishListController::class, 'removeFromWishlist'])->name('removeFromWishlist');
 

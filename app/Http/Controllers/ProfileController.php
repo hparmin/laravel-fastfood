@@ -104,6 +104,9 @@ class ProfileController extends Controller
 
     public function showWishlist()
     {
+
+//        $wishlist_id = auth()->user()->wishlist;
+
         $user = auth()->user();
 
         $wishlist = wishlist::query()->where('user_id',$user->id)->get();
