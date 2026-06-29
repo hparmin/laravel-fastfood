@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
-class product extends Model
+class Product extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'products';
@@ -21,11 +21,20 @@ class product extends Model
     {
         return $this->hasMany(ProductImage::class);
     }
-    protected $appends = "is_sale";
-
+    public function cartItems()
+    {
+        return $this->hasMany(Cart::class);
+    }
+    protected $appends = ["is_sale","off_percent"];
     public function getIsSaleAttribute()
     {
         return $this->quantity > 0 && $this->sale_price !== 0 && $this->sale_price !== null && $this->date_on_sale_from < Carbon::now('Asia/Tehran') && $this->date_on_sale_to > Carbon::now('Asia/Tehran');
+    }
+    public function getOffPercentAttribute()
+    {
+        if ($this->is_sale){
+            return round(100 - ($this->sale_price / $this->price * 100));
+        }
     }
 
     public function scopeSearch($query, $search)

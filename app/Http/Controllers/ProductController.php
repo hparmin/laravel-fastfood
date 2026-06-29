@@ -109,7 +109,7 @@ class ProductController extends Controller
             'date_on_sale_from' => $request->date_on_sale_from !== null ? getMiladiDate($request->date_on_sale_from) : null,
             'date_on_sale_to' => $request->date_on_sale_to !== null ? getMiladiDate($request->date_on_sale_to) : null
         ]);
-        return redirect()->back()->with('success','محصول با موفقیت یروزرسانی شد.');
+        return redirect()->back()->with('success','محصول با موفقیت بروزرسانی شد.');
     }
 
     public function show(product $product)

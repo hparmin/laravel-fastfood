@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Traits\CartTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use mysql_xdevapi\Exception;
@@ -17,6 +18,7 @@ use Carbon\Carbon;
 
 class AuthController extends Controller
 {
+    use CartTrait;
     public function loginForm()
     {
         return view('app.login.login_form');
@@ -92,6 +94,7 @@ class AuthController extends Controller
                 ], 422);
             }
 
+            $session_id = $request->session()->getId();
             auth()->login($user, true);
 
             $user->update([
@@ -99,6 +102,10 @@ class AuthController extends Controller
                 'login_token' => null,
             ]);
 
+            $this->mergeCart(
+                $session_id,
+                auth()->id()
+            );
             return response()->json([
                 'message' => 'ورود با موفقیت انجام شد.'
             ], 200);
@@ -109,6 +116,7 @@ class AuthController extends Controller
                 'error' => $ex->getMessage(),
             ], 500);
         }
+
     }
 
     public function resendOtp(Request $request)
@@ -157,6 +165,7 @@ class AuthController extends Controller
                 'error' => $ex->getMessage(),
             ], 500);
         }
+
     }
 
     public function logout(Request $request)

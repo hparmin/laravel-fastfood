@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class footer extends Model
+class AboutUs extends Model
 {
-    protected $table = 'footer';
+    protected $table = "about_us";
     protected $guarded = [];
+
 }

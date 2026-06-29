@@ -89,3 +89,5 @@ function getJalaliDate($date)
 {
     return verta($date)->format('Y/m/j H:i:s');
 }
+
+

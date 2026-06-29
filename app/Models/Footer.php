@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class contact_us extends Model
+class Footer extends Model
 {
-    protected $table = "contact_us";
+    protected $table = 'footer';
     protected $guarded = [];
 }

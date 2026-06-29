@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class feature extends Model
+class Feature extends Model
 {
     protected $table = 'features';
     protected $guarded = [];
