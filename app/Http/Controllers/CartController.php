@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\cart;
 use App\Models\product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -34,55 +35,130 @@ class CartController extends Controller
 
     }
 
-
-
     public function increment(Request $request)
     {
         $this->AdjustmentCart($request);
-        $request->validate([
+
+        $validated = $request->validate([
             'product_id' => 'required|int|exists:products,id',
-            'qty' => 'nullable|int|min:1'
+            'qty' => 'nullable|int|min:1',
         ]);
 
-        $qty = $request->qty ? intval($request->qty) : 1;
-        $product_id = $request->product_id;
+        $qty = intval($validated['qty'] ?? 1);
+        $product = Product::findOrFail($validated['product_id']);
 
-        $product = Product::findOrFail($product_id);
-
-        $session_id = $request->session()->getId();
-        $user_id = auth()->id();
-
-        $query = Cart::where('product_id', $product_id);
-
-        if ($user_id) {
-            $query->where('user_id', $user_id);
-        } else {
-            $query->where('session_id', $session_id);
+        if ($qty > $product->quantity) {
+            return redirect()->back()->with('error', "تعداد درخواستی بیش از موجودی انبار میباشد. موجودی انبار: {$product->quantity} عدد"
+            );
         }
+        $sessionId = $request->session()->getId();
+        $userId = auth()->id();
+
+        try {
+            DB::transaction(function () use ($product, $qty, $sessionId, $userId) {
+                $query = Cart::withTrashed()
+                    ->where('product_id', $product->id);
+                if ($userId) {
+                    $query->where('user_id', $userId);
+                } else {
+                    $query->whereNull('user_id')
+                        ->where('session_id', $sessionId);
+                }
+
+                $cartItem = $query->first();
+
+                if (!$cartItem) {
+                    Cart::create([
+                        'user_id' => $userId,
+                        'session_id' => $sessionId,
+                        'product_id' => $product->id,
+                        'qty' => $qty,
+                    ]);
+
+                    return;
+                }
+
+                if ($cartItem->trashed()) {
+                    $cartItem->restore();
+                    $cartItem->update([
+                        'user_id' => $userId,
+                        'session_id' => $sessionId,
+                        'qty' => $qty,
+                    ]);
+
+                    return;
+                }
+
+                $newQty = $cartItem->qty + $qty;
+
+                if ($newQty > $product->quantity) {
+                    throw new \RuntimeException(
+                        "تعداد درخواستی بیش از موجودی انبار میباشد. موجودی انبار: {$product->quantity} عدد"
+                    );
+                }
+
+                $cartItem->increment('qty', $qty);
+            });
+        } catch (\RuntimeException $exception) {
+            return redirect()->back()->with('error', $exception->getMessage());
+        }
+
+        return redirect()->back()->with([
+            'success' => "{$product->name} با موفقیت به سبد خرید اضافه شد.",
+        ]);
+    }
+
+    public function decrement(Request $request)
+    {
+        $this->AdjustmentCart($request);
+
+        $validated = $request->validate([
+            'product_id' => 'required|int|exists:products,id',
+            'qty' => 'nullable|int|min:1',
+        ]);
+
+        $qty = intval($validated['qty'] ?? 1);
+        $product = Product::findOrFail($validated['product_id']);
+
+
+        $sessionId = $request->session()->getId();
+        $userId = auth()->id();
+
+        $query = Cart::where('product_id', $product->id);
+
+        if ($userId) {
+            $query->where('user_id', $userId);
+        } else {
+            $query->whereNull('user_id')
+                ->where('session_id', $sessionId);
+        }
+
         $cartItem = $query->first();
 
-        if ($cartItem) {
-            if ($cartItem->qty + $qty <= $product->quantity) {
-                $cartItem->increment('qty', $qty);
-            } else {
-                $product_quantity = $product->quantity;
-                return redirect()->back()->with('error', "تعداد درخواستی بیش از موجودی انبار میباشد. موجودی انبار: $product_quantity عدد");
-            }
-        } else {
-            if ($qty <= $product->quantity) {
-                cart::create([
-                    'user_id' => $user_id,
-                    'session_id' => $session_id,
-                    'product_id' => $product_id,
-                    'qty' => $qty
-                ]);
-            } else {
-                $product_quantity = $product->quantity;
-                return redirect()->back()->with('error', "تعداد درخواستی بیش از موجودی انبار میباشد. موجودی انبار: $product_quantity عدد");
-            }
+
+        if ($qty == $cartItem->qty){
+            return redirect()->back()->with(["error" => 'تعداد حذف غیر مجاز.']);
         }
-        $product_name = $product->name;
-        return redirect()->back()->with(['success' => "$product_name با موفقیت به سبد خرید اضافه شد."]);
+
+        if (!$cartItem) {
+            return redirect()->back()->with([
+                'warning' => 'محصول در سبد شما یافت نشد.',
+            ]);
+        }
+
+        if ($qty >= $cartItem->qty) {
+            $cartItem->delete();
+
+            return redirect()->back()->with([
+                'warning' => "{$product->name} با موفقیت از سبد خرید حذف شد.",
+            ]);
+        }
+
+        $cartItem->decrement('qty', $qty);
+
+        return redirect()->back()->with([
+            'warning' => "{$product->name} با موفقیت از سبد خرید کم شد.",
+        ]);
     }
 
     public function destroy(Cart $cart)
@@ -106,9 +182,53 @@ class CartController extends Controller
         }
         $cart_items = $query->get();
 
-        return view('profile.cart.index', compact('cart_items'));
+        $before_off_payment = 0;
+        $final_payment = 0;
+        foreach ($cart_items as $cart_item){
+            if ($cart_item->product->is_sale){
+                $final_payment+=$cart_item->product->sale_price*$cart_item->qty;
+            }else{
+                $final_payment+=$cart_item->product->price*$cart_item->qty;
+            }
+            $before_off_payment+=$cart_item->product->price*$cart_item->qty;
+        }
+
+        if ($user_id){
+            $addresses = auth()->user()->addresses;
+        }else{
+            $addresses = null;
+        }
+
+        return view('profile.cart.index', compact('cart_items','before_off_payment','final_payment','addresses'));
     }
 
+    public function deleteCart(Request $request)
+    {
+        $session_id = $request->session()->getId();
+        $user_id = auth()->id();
+
+
+        if ($user_id) {
+            $query = Cart::where('user_id', $user_id);
+        } else {
+            $query = Cart::where('session_id', $session_id);
+        }
+        $query->delete();
+        return redirect()->back()->with(["warning" => "کل سبد خرید حذف شد"]);
+    }
+
+    public function test(Request $request)
+    {
+        $session_id = $request->session()->getId();
+        if (auth()->check()) {
+            $cartCount = Cart::where('user_id', auth()->id())
+                ->count();
+        }else{
+            $cartCount = Cart::where('session_id', $session_id)
+                ->count();
+        }
+        var_dump($cartCount);
+    }
 
 //    public function increment(Request $request)
 //    {

@@ -37,12 +37,14 @@
                                                          src="{{ asset('images/products/'.$item->product->primary_image) }}"
                                                          width="100" alt="">
                                                 </th>
-                                                <td class="fw-bold">{{ $item->product->name }}</td>
+                                                <td class="fw-bold">
+                                                    <a href="{{ route('products.single',['product' => $item->product->slug]) }}">{{ $item->product->name }}</a>
+                                                </td>
                                                 <td>
                                                     @if($item->product->is_sale)
                                                         <div>
-                                                            <del>{{ $item->product->price }}</del>
-                                                            {{ $item->product->sale_price }}
+                                                            <del>{{ number_format($item->product->price) }}</del>
+                                                            {{ number_format($item->product->sale_price) }}
                                                             تومان
                                                         </div>
                                                         <div class="text-danger">
@@ -50,23 +52,25 @@
                                                         </div>
                                                     @else
                                                         <div>
-                                                            135,000 تومان
+                                                            {{ number_format($item->product->final_price) }} تومان
                                                         </div>
                                                     @endif
                                                 </td>
                                                 <td>
                                                     <div class="input-counter">
-                                                    <span class="plus-btn">
-                                                        +
-                                                    </span>
+                                                        <a href="{{ route('addToCart',['product_id' => $item->product->id ]) }}"
+                                                           class="plus-btn">
+                                                            +
+                                                        </a>
                                                         <div class="input-number">{{ $item->qty }}</div>
-                                                        <span class="minus-btn">
-                                                        -
-                                                    </span>
+                                                        <a href="{{ route('removeFromToCart',['product_id' => $item->product->id ]) }}"
+                                                           class="minus-btn">
+                                                            -
+                                                        </a>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span>115,000</span>
+                                                    <span>{{ number_format($item->product->final_price*$item->qty) }}</span>
                                                     <span class="ms-1">تومان</span>
                                                 </td>
                                                 <td>
@@ -84,7 +88,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <button class="btn btn-primary mb-4">پاک کردن سبد خرید</button>
+                                <a href="{{ route('deleteCart') }}" class="btn btn-primary mb-4">پاک کردن سبد خرید</a>
                             </div>
                         </div>
                         <div class="row mt-4">
@@ -96,16 +100,24 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6 d-flex justify-content-end align-items-baseline">
-                                <div>
-                                    انتخاب آدرس
+                            <div class="col-12 col-md-6 d-flex justify-content-end align-items-baseline"
+                                 style="gap:10px">
+                                <div class="ml-5">
+                                    @if($addresses)
+                                        انتخاب آدرس:
+                                    @else
+                                        آدرس ندارید
+                                    @endif
                                 </div>
-                                <select style="width: 200px;" class="form-select ms-3"
-                                        aria-label="Default select example">
-                                    <option selected="">منزل</option>
-                                    <option value="1">محل کار</option>
-                                </select>
-                                <a href="profile.html" class="btn btn-primary">
+                                @if($addresses)
+                                    <select style="width: 200px;" class="form-select ms-3"
+                                            aria-label="Default select example">
+                                        @foreach($addresses as $address)
+                                            <option value="{{ $address->id }}">{{ $address->title }}</option>
+                                        @endforeach
+                                    </select>
+                                @endif
+                                <a href="{{ route('addresses.create') }}" class="btn btn-primary">
                                     ایجاد آدرس
                                 </a>
                             </div>
@@ -119,21 +131,21 @@
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>مجموع قیمت :</div>
                                                 <div>
-                                                    535,000 تومان
+                                                    {{ number_format($before_off_payment) }} تومان
                                                 </div>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>تخفیف :
-                                                    <span class="text-danger ms-1">10%</span>
+                                                    <span class="text-danger ms-1">{{ intval(100-($final_payment*100/$before_off_payment)) }}%</span>
                                                 </div>
                                                 <div class="text-danger">
-                                                    53,500 تومان
+                                                    {{ number_format($before_off_payment-$final_payment) }} تومان
                                                 </div>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>قیمت پرداختی :</div>
                                                 <div>
-                                                    481,500 تومان
+                                                    {{ number_format($final_payment) }} تومان
                                                 </div>
                                             </li>
                                         </ul>

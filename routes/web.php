@@ -130,8 +130,11 @@ Route::get('/add_to_wishlist', [WishListController::class, 'addToWishlist'])->na
 
 Route::prefix('cart')->group(function () {
     Route::get('/add-to-cart', [CartController::class, 'increment'])->name('addToCart');
+    Route::get('/remove-from-cart', [CartController::class, 'decrement'])->name('removeFromToCart');
+    Route::get('/delete-cart', [CartController::class, 'deleteCart'])->name('deleteCart');
     Route::get('/', [CartController::class, 'cart'])->name('cart');
     Route::get('/merge', [CartController::class, 'mergecart'])->name('mergecart');
 //    Route::get('/adjust', [CartController::class, 'AdjustmentCart'])->name('AdjustmentCart');
     Route::delete('{cart}/destroy', [CartController::class, 'destroy'])->name('destroyFromCart');
+    Route::get('test', [CartController::class, 'test'])->name('test');
 });

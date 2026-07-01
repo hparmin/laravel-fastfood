@@ -25,7 +25,7 @@ class Product extends Model
     {
         return $this->hasMany(Cart::class);
     }
-    protected $appends = ["is_sale","off_percent"];
+    protected $appends = ["is_sale","off_percent","final_price"];
     public function getIsSaleAttribute()
     {
         return $this->quantity > 0 && $this->sale_price !== 0 && $this->sale_price !== null && $this->date_on_sale_from < Carbon::now('Asia/Tehran') && $this->date_on_sale_to > Carbon::now('Asia/Tehran');
@@ -34,6 +34,14 @@ class Product extends Model
     {
         if ($this->is_sale){
             return round(100 - ($this->sale_price / $this->price * 100));
+        }
+    }
+    public function getFinalPriceAttribute()
+    {
+        if ($this->is_sale){
+            return $this->sale_price;
+        }else{
+            return $this->price;
         }
     }
 
