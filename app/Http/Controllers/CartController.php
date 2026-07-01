@@ -110,10 +110,6 @@ class CartController extends Controller
     }
 
 
-
-
-
-
 //    public function increment(Request $request)
 //    {
 //        $this->AdjustmentCart($request);
