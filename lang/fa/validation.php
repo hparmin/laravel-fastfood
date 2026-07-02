@@ -168,6 +168,8 @@ return [
         'contact_address'     => 'آدرس',
         'contact_phone'     => 'شماره تماس',
         'contact_email'     => 'ایمیل',
+        'percentage'     => 'درصد',
+        'expired_at'     => 'تاریخ انقضا',
     ],
 
 ];

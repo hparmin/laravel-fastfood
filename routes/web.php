@@ -13,6 +13,7 @@ use \App\Http\Controllers\AuthController;
 use \App\Http\Controllers\ProfileController;
 use \App\Http\Controllers\WishListController;
 use \App\Http\Controllers\CartController;
+use \App\Http\Controllers\CouponController;
 
 
 // app routes
@@ -21,11 +22,11 @@ Route::get('/about-us', [AboutUsController::class, 'show'])->name('app.about-us'
 
 
 // panel routes:
-Route::get('/panel', function () {
+Route::middleware('auth')->get('/panel', function () {
     return view('panel.index');
 })->name('panel.index');
 // the slider:
-Route::group(['prefix' => 'sliders'], function () {
+Route::middleware('auth')->prefix('sliders')->group(function () {
     Route::get('/create', [SlidersController::class, 'create'])->name('slider.create');
     Route::post('/store', [SlidersController::class, 'store'])->name('slider.store');
     Route::get('/', [SlidersController::class, 'index'])->name('slider.index');
@@ -34,7 +35,7 @@ Route::group(['prefix' => 'sliders'], function () {
     Route::delete('/{slider}', [SlidersController::class, 'destroy'])->name('slider.destroy');
 });
 // the feature
-Route::group(['prefix' => 'feature'], function () {
+Route::middleware('auth')->prefix('feature')->group(function () {
     Route::get('/create', [FeatureController::class, 'create'])->name('feature.create');
     Route::post('/store', [FeatureController::class, 'store'])->name('feature.store');
     Route::get('/', [FeatureController::class, 'index'])->name('feature.index');
@@ -44,14 +45,14 @@ Route::group(['prefix' => 'feature'], function () {
 });
 
 // the aboutUs
-Route::group(['prefix' => 'about'], function () {
+Route::middleware('auth')->prefix('about')->group(function () {
     Route::get('/', [AboutUsController::class, 'index'])->name('about.index');
     Route::get('/{about}/edit', [AboutUsController::class, 'edit'])->name('about.edit');
     Route::put('/{about}', [AboutUsController::class, 'update'])->name('about.update');
 });
 
 // the ContactUs
-Route::group(['prefix' => 'contact_us'], function () {
+Route::middleware('auth')->prefix('contact_us')->group(function () {
     Route::post('/store', [ContactUsController::class, 'store'])->name('contact.store');
     Route::get('/', [ContactUsController::class, 'index'])->name('contact.index');
     Route::get('/all', [ContactUsController::class, 'showall'])->name('contact.showall');
@@ -68,7 +69,7 @@ Route::middleware('auth')->prefix('footer')->group(function () {
 });
 
 // the categories
-Route::group(['prefix' => 'categories'], function () {
+Route::middleware('auth')->prefix('categories')->group(function () {
     Route::get('/', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/create', [CategoryController::class, 'create'])->name('categories.create');
     Route::post('/store', [CategoryController::class, 'store'])->name('categories.store');
@@ -107,7 +108,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('auth.resendOtp');
 });
 
-Route::get('/test', function (){return "hellow"; })->name('test')->middleware('auth');
+Route::get('/test', function () {
+    return "hellow";
+})->name('test')->middleware('auth');
 
 
 // panel
@@ -125,7 +128,6 @@ Route::middleware('auth')->prefix('profile')->group(function () {
     Route::get('/wishlist', [ProfileController::class, 'showWishlist'])->name('wishlist.index');
     Route::get('/remove_from_wishlist', [WishListController::class, 'removeFromWishlist'])->name('removeFromWishlist');
 });
-
 Route::get('/add_to_wishlist', [WishListController::class, 'addToWishlist'])->name('addToWishlist');
 
 Route::prefix('cart')->group(function () {
@@ -137,4 +139,18 @@ Route::prefix('cart')->group(function () {
 //    Route::get('/adjust', [CartController::class, 'AdjustmentCart'])->name('AdjustmentCart');
     Route::delete('{cart}/destroy', [CartController::class, 'destroy'])->name('destroyFromCart');
     Route::get('test', [CartController::class, 'test'])->name('test');
+});
+
+
+// the coupons
+Route::middleware('auth')->prefix('coupon')->group(function () {
+    Route::get('/', [CouponController::class, 'index'])->name('coupon.index');
+    Route::get('/create', [CouponController::class, 'create'])->name('coupon.create');
+    Route::post('/store', [CouponController::class, 'store'])->name('coupon.store');
+    Route::delete('/{coupon}/destroy', [CouponController::class, 'destroy'])->name('coupon.destroy');
+    Route::get('/{coupon}/edit', [CouponController::class, 'edit'])->name('coupon.edit');
+    Route::get('/{coupon}/recovery', [CouponController::class, 'recovery'])->name('coupon.recovery');
+    Route::get('/trash', [CouponController::class, 'trash'])->name('coupon.trash');
+    Route::delete('/{coupon_id}/hard_delete', [CouponController::class, 'hard_delete'])->name('coupon.hard.delete');
+    Route::put('/{coupon}/update', [CouponController::class, 'update'])->name('coupon.update');
 });

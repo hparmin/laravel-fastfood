@@ -28,7 +28,7 @@
     <div class="navbar-nav">
         <div class="nav-item text-nowrap d-flex align-items-center">
             <span class="nav-link text-white">آرمین حاجی پور</span>
-            <a class="nav-link text-white px-3" href="#">خروج</a>
+            <a class="nav-link text-white px-3" href="{{ route('auth.logout') }}">خروج</a>
         </div>
     </div>
 </header>
