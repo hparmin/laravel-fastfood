@@ -16,7 +16,6 @@ class CouponController extends Controller
     {
         return view('panel.coupon.create');
     }
-
     public function store(Request $request)
     {
 //        dd($request->all());
@@ -71,5 +70,18 @@ class CouponController extends Controller
     {
         $coupon->delete();
         return redirect()->back()->with('warning','کد تخفیف با موفقیت حذف شد');
+    }
+
+    public function check(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string'
+        ]);
+        $coupon = Coupon::where('code', $request->code)->first();
+        if (!$coupon){
+            return redirect()->back()->with(['warning'=>'کد تخفیف یافت نشد']);
+        }
+        $request->session()->put('coupon',['code'=>$coupon->code,'percent'=>$coupon->percentage]);
+        return redirect()->back()->with(['success' => 'کد تخفیف با موفقیت اعمال شد.']);
     }
 }

@@ -12,6 +12,9 @@
             </div>
         </div>
     @else
+        @php
+            echo "hellow";
+        @endphp
         <section class="single_page_section layout_padding">
             <div class="container">
                 <div class="row">
@@ -93,12 +96,21 @@
                         </div>
                         <div class="row mt-4">
                             <div class="col-12 col-md-6">
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="کد تخفیف">
-                                    <button class="input-group-text" id="basic-addon2">اعمال کد
-                                        تخفیف
-                                    </button>
-                                </div>
+                                <form action="{{ route('coupon.check') }}">
+                                    <div class="input-group mb-3">
+                                        <input type="text" value="{{ old('code') }}" name="code" class="form-control"
+                                               placeholder="کد تخفیف">
+
+                                        <button type="submit" class="input-group-text" id="basic-addon2">
+                                            اعمال کد تخفیف
+                                        </button>
+                                    </div>
+                                    @error('code')
+                                    <div class="form-text text-danger">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </form>
                             </div>
                             <div class="col-12 col-md-6 d-flex justify-content-end align-items-baseline"
                                  style="gap:10px">
@@ -135,17 +147,35 @@
                                                 </div>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
-                                                <div>تخفیف :
-                                                    <span class="text-danger ms-1">{{ intval(100-($final_payment*100/$before_off_payment)) }}%</span>
+                                                <div>تخفیف محصولات:
+                                                    <span class="text-danger ms-1">{{ intval(100-($after_off_payment*100/$before_off_payment)) }}%</span>
                                                 </div>
                                                 <div class="text-danger">
-                                                    {{ number_format($before_off_payment-$final_payment) }} تومان
+                                                    {{ number_format($before_off_payment-$after_off_payment) }} تومان
                                                 </div>
                                             </li>
+                                            @if($coupon)
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    <div>کد تخفیف:
+                                                        <span class="text-danger ms-1">{{ $coupon['percent'] }}%
+                                                    </span>
+                                                    </div>
+                                                    <div class="text-danger">
+                                                        {{ number_format($after_off_payment*$coupon['percent']/100) }}
+                                                        تومان
+                                                    </div>
+                                                </li>
+                                            @endif
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>قیمت پرداختی :</div>
                                                 <div>
-                                                    {{ number_format($final_payment) }} تومان
+                                                    @if($coupon)
+                                                        {{ number_format($after_off_payment-$after_off_payment*$coupon['percent']/100) }}
+                                                        تومان
+                                                    @else
+                                                        {{ number_format($after_off_payment) }}
+                                                        تومان
+                                                    @endif
                                                 </div>
                                             </li>
                                         </ul>

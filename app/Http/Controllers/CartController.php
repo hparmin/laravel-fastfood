@@ -34,7 +34,6 @@ class CartController extends Controller
         return $res;
 
     }
-
     public function increment(Request $request)
     {
         $this->AdjustmentCart($request);
@@ -107,7 +106,6 @@ class CartController extends Controller
             'success' => "{$product->name} با موفقیت به سبد خرید اضافه شد.",
         ]);
     }
-
     public function decrement(Request $request)
     {
         $this->AdjustmentCart($request);
@@ -160,16 +158,17 @@ class CartController extends Controller
             'warning' => "{$product->name} با موفقیت از سبد خرید کم شد.",
         ]);
     }
-
     public function destroy(Cart $cart)
     {
         $cart->delete();
         $product_name = $cart->product->name;
         return redirect()->back()->with(['warning' => "$product_name با موفقیت از سبد حذف شد"]);
     }
-
     public function cart(Request $request)
     {
+//        $request->session()->remove('coupon');
+        $coupon = 0;
+        $coupon = $request->session()->get('coupon');
         $session_id = $request->session()->getId();
         $user_id = auth()->id();
 
@@ -183,12 +182,12 @@ class CartController extends Controller
         $cart_items = $query->get();
 
         $before_off_payment = 0;
-        $final_payment = 0;
+        $after_off_payment = 0;
         foreach ($cart_items as $cart_item){
             if ($cart_item->product->is_sale){
-                $final_payment+=$cart_item->product->sale_price*$cart_item->qty;
+                $after_off_payment+=$cart_item->product->sale_price*$cart_item->qty;
             }else{
-                $final_payment+=$cart_item->product->price*$cart_item->qty;
+                $after_off_payment+=$cart_item->product->price*$cart_item->qty;
             }
             $before_off_payment+=$cart_item->product->price*$cart_item->qty;
         }
@@ -199,7 +198,7 @@ class CartController extends Controller
             $addresses = null;
         }
 
-        return view('profile.cart.index', compact('cart_items','before_off_payment','final_payment','addresses'));
+        return view('profile.cart.index', compact('cart_items','before_off_payment','after_off_payment','addresses','coupon'));
     }
 
     public function deleteCart(Request $request)
