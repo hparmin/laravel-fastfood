@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Coupon;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CouponController extends Controller
@@ -81,7 +82,21 @@ class CouponController extends Controller
         if (!$coupon){
             return redirect()->back()->with(['warning'=>'کد تخفیف یافت نشد']);
         }
+        if ($coupon->expired_at < Carbon::now('Asia/Tehran')){
+            return redirect()->back()->with(['warning' => "کد تخفیف $request->code منقضی شده است."]);
+        }
         $request->session()->put('coupon',['code'=>$coupon->code,'percent'=>$coupon->percentage]);
         return redirect()->back()->with(['success' => 'کد تخفیف با موفقیت اعمال شد.']);
+    }
+
+    public function destroySession(Request $request)
+    {
+        $request->session()->remove('coupon');
+        return redirect()->back();
+    }
+    public function userdestroySession(Request $request)
+    {
+        $request->session()->remove('coupon');
+        return redirect()->back()->with(['warning'=>'کد تخفیف حذف شد.']);
     }
 }

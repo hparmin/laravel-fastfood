@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Traits\CartTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use mysql_xdevapi\Exception;
 use Illuminate\Support\Str;
 
 

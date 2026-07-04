@@ -12,9 +12,6 @@
             </div>
         </div>
     @else
-        @php
-            echo "hellow";
-        @endphp
         <section class="single_page_section layout_padding">
             <div class="container">
                 <div class="row">
@@ -146,19 +143,25 @@
                                                     {{ number_format($before_off_payment) }} تومان
                                                 </div>
                                             </li>
-                                            <li class="list-group-item d-flex justify-content-between">
-                                                <div>تخفیف محصولات:
-                                                    <span class="text-danger ms-1">{{ intval(100-($after_off_payment*100/$before_off_payment)) }}%</span>
-                                                </div>
-                                                <div class="text-danger">
-                                                    {{ number_format($before_off_payment-$after_off_payment) }} تومان
-                                                </div>
-                                            </li>
+                                            @if($before_off_payment-$after_off_payment !== 0)
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    <div>تخفیف محصولات:
+                                                        {{--                                                    <span class="text-danger ms-1">{{ intval(100-($after_off_payment*100/$before_off_payment)) }}%</span>--}}
+                                                    </div>
+                                                    <div class="text-danger">
+                                                        {{ number_format($before_off_payment-$after_off_payment) }}
+                                                        تومان
+                                                    </div>
+                                                </li>
+                                            @endif
                                             @if($coupon)
                                                 <li class="list-group-item d-flex justify-content-between">
-                                                    <div>کد تخفیف:
-                                                        <span class="text-danger ms-1">{{ $coupon['percent'] }}%
-                                                    </span>
+                                                    <div>
+                                                        <a class="remove-coupon" href="{{ route('coupon.destroy.session.byuser') }}">
+                                                            <i class="bi bi-x text-danger fw-bold fs-4 cursor-pointer"></i>
+                                                        </a>
+                                                        کد تخفیف:
+                                                        <span class="text-danger ms-1">{{ $coupon['percent'] }}%</span>
                                                     </div>
                                                     <div class="text-danger">
                                                         {{ number_format($after_off_payment*$coupon['percent']/100) }}

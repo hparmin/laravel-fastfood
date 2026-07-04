@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\cart;
+use App\Models\Coupon;
 use App\Models\product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -34,6 +36,7 @@ class CartController extends Controller
         return $res;
 
     }
+
     public function increment(Request $request)
     {
         $this->AdjustmentCart($request);
@@ -106,6 +109,7 @@ class CartController extends Controller
             'success' => "{$product->name} با موفقیت به سبد خرید اضافه شد.",
         ]);
     }
+
     public function decrement(Request $request)
     {
         $this->AdjustmentCart($request);
@@ -134,7 +138,7 @@ class CartController extends Controller
         $cartItem = $query->first();
 
 
-        if ($qty == $cartItem->qty){
+        if ($qty == $cartItem->qty) {
             return redirect()->back()->with(["error" => 'تعداد حذف غیر مجاز.']);
         }
 
@@ -158,19 +162,35 @@ class CartController extends Controller
             'warning' => "{$product->name} با موفقیت از سبد خرید کم شد.",
         ]);
     }
+
     public function destroy(Cart $cart)
     {
         $cart->delete();
         $product_name = $cart->product->name;
         return redirect()->back()->with(['warning' => "$product_name با موفقیت از سبد حذف شد"]);
     }
+
     public function cart(Request $request)
     {
 //        $request->session()->remove('coupon');
+//        dd($request->session()->get('coupon'));
+
+
         $coupon = 0;
         $coupon = $request->session()->get('coupon');
+
         $session_id = $request->session()->getId();
         $user_id = auth()->id();
+
+        if (isset($coupon['code'])) {
+            $db_coupon = Coupon::where('code', $coupon['code'])->first();
+            if (!$db_coupon) {
+                return redirect()->route('coupon.destroy.session');
+            }
+            if ($db_coupon->expired_at < Carbon::now('Asia/Tehran')){
+                return redirect()->route('coupon.destroy.session');
+            }
+        }
 
         $query = Cart::with('product');
 
@@ -183,22 +203,22 @@ class CartController extends Controller
 
         $before_off_payment = 0;
         $after_off_payment = 0;
-        foreach ($cart_items as $cart_item){
-            if ($cart_item->product->is_sale){
-                $after_off_payment+=$cart_item->product->sale_price*$cart_item->qty;
-            }else{
-                $after_off_payment+=$cart_item->product->price*$cart_item->qty;
+        foreach ($cart_items as $cart_item) {
+            if ($cart_item->product->is_sale) {
+                $after_off_payment += $cart_item->product->sale_price * $cart_item->qty;
+            } else {
+                $after_off_payment += $cart_item->product->price * $cart_item->qty;
             }
-            $before_off_payment+=$cart_item->product->price*$cart_item->qty;
+            $before_off_payment += $cart_item->product->price * $cart_item->qty;
         }
 
-        if ($user_id){
+        if ($user_id) {
             $addresses = auth()->user()->addresses;
-        }else{
+        } else {
             $addresses = null;
         }
 
-        return view('profile.cart.index', compact('cart_items','before_off_payment','after_off_payment','addresses','coupon'));
+        return view('profile.cart.index', compact('cart_items', 'before_off_payment', 'after_off_payment', 'addresses', 'coupon'));
     }
 
     public function deleteCart(Request $request)
@@ -222,7 +242,7 @@ class CartController extends Controller
         if (auth()->check()) {
             $cartCount = Cart::where('user_id', auth()->id())
                 ->count();
-        }else{
+        } else {
             $cartCount = Cart::where('session_id', $session_id)
                 ->count();
         }

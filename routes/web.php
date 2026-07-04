@@ -154,4 +154,6 @@ Route::middleware('auth')->prefix('coupon')->group(function () {
     Route::delete('/{coupon_id}/hard_delete', [CouponController::class, 'hard_delete'])->name('coupon.hard.delete');
     Route::put('/{coupon}/update', [CouponController::class, 'update'])->name('coupon.update');
     Route::get('/check', [CouponController::class, 'check'])->name('coupon.check');
+    Route::get('/destroy-session', [CouponController::class, 'destroySession'])->name('coupon.destroy.session');
+    Route::get('/user-destroy-session', [CouponController::class, 'userdestroySession'])->name('coupon.destroy.session.byuser');
 });
