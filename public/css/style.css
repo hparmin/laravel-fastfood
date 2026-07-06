@@ -1229,6 +1229,7 @@ a.remove-coupon{
     border-radius: 100%;
     position: relative;
     z-index: 50;
+    margin-left: 5px;
 }
 a.remove-coupon>i{
     position: relative;
