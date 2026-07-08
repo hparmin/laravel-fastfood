@@ -119,7 +119,7 @@
                                     @endif
                                 </div>
                                 @if($addresses)
-                                    <select  @error('address_id') style="border: 2px solid red; width: 200px;" @enderror x-model="addressId" style="width: 200px;" class="form-select ms-3"
+                                    <select  @error('address_id') style="box-shadow: 0 0 0 0.25rem rgb(250 0 0 / 70%); width: 200px;" @enderror x-model="addressId" style="width: 200px;" class="form-select ms-3"
                                             aria-label="Default select example">
                                         <option value="0">انتخاب کنید</option>
                                         @foreach($addresses as $address)
@@ -187,8 +187,6 @@
                                         </ul>
                                         <form action="{{ route('payment.send') }}" method="POST">
                                             @csrf
-                                            <input type="hidden" name="coupon_code"
-                                                   value="{{ $coupon !=null ? $coupon['code'] : null }}">
                                             <input type="hidden" name="address_id" :value="addressId">
                                             <button class="user_option btn-auth mt-4">پرداخت</button>
                                         </form>

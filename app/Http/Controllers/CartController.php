@@ -122,7 +122,6 @@ class CartController extends Controller
         $qty = intval($validated['qty'] ?? 1);
         $product = Product::findOrFail($validated['product_id']);
 
-
         $sessionId = $request->session()->getId();
         $userId = auth()->id();
 

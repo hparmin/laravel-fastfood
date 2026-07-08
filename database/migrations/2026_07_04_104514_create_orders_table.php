@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('address_id');
             $table->foreign('address_id')->references('id')->on('user_adresses')->onDelete('cascade');
 
-            $table->foreignId('coupon_id');
+            $table->foreignId('coupon_id')->nullable();
             $table->foreign('coupon_id')->references('id')->on('coupons')->onDelete('cascade');
 
             $table->tinyInteger('status')->default(0);

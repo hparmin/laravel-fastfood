@@ -160,6 +160,7 @@ Route::middleware('auth')->prefix('coupon')->group(function () {
 });
 Route::middleware('auth')->prefix('payment')->group(function () {
     Route::post('/send', [PaymentController::class, 'send'])->name('payment.send');
+    Route::get('/verify', [PaymentController::class, 'callback'])->name('payment.callback');
 });
 
 
