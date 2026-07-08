@@ -13,7 +13,7 @@
         </div>
     @else
         <section class="single_page_section layout_padding">
-            <div x-data="{ addressId = null }" class="container">
+            <div x-data="{ addressId : null }" class="container">
                 <div class="row">
                     <div class="col-md-10 offset-md-1">
                         <div class="row gy-5">
@@ -119,8 +119,9 @@
                                     @endif
                                 </div>
                                 @if($addresses)
-                                    <select x-model="addressId" style="width: 200px;" class="form-select ms-3"
+                                    <select  @error('address_id') style="border: 2px solid red; width: 200px;" @enderror x-model="addressId" style="width: 200px;" class="form-select ms-3"
                                             aria-label="Default select example">
+                                        <option value="0">انتخاب کنید</option>
                                         @foreach($addresses as $address)
                                             <option value="{{ $address->id }}">{{ $address->title }}</option>
                                         @endforeach
@@ -155,9 +156,11 @@
                                                 </li>
                                             @endif
                                             @if($coupon)
-                                                <li class="list-group-item d-flex justify-content-between" style="padding-right: 1px;">
+                                                <li class="list-group-item d-flex justify-content-between"
+                                                    style="padding-right: 1px;">
                                                     <div>
-                                                        <a class="remove-coupon" href="{{ route('coupon.destroy.session.byuser') }}">
+                                                        <a class="remove-coupon"
+                                                           href="{{ route('coupon.destroy.session.byuser') }}">
                                                             <i class="bi bi-x text-danger fw-bold fs-4 cursor-pointer"></i>
                                                         </a>
                                                         کد تخفیف:
@@ -182,8 +185,10 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                        <form action="" method="POST">
-                                            <input type="hidden" name="coupon_code" value="{{ $coupon !=null ? $coupon['code'] : null }}">
+                                        <form action="{{ route('payment.send') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="coupon_code"
+                                                   value="{{ $coupon !=null ? $coupon['code'] : null }}">
                                             <input type="hidden" name="address_id" :value="addressId">
                                             <button class="user_option btn-auth mt-4">پرداخت</button>
                                         </form>

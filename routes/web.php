@@ -14,6 +14,7 @@ use \App\Http\Controllers\ProfileController;
 use \App\Http\Controllers\WishListController;
 use \App\Http\Controllers\CartController;
 use \App\Http\Controllers\CouponController;
+use \App\Http\Controllers\PaymentController;
 
 
 // app routes
@@ -131,10 +132,10 @@ Route::middleware('auth')->prefix('profile')->group(function () {
 Route::get('/add_to_wishlist', [WishListController::class, 'addToWishlist'])->name('addToWishlist');
 
 Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'cart'])->name('cart');
     Route::get('/add-to-cart', [CartController::class, 'increment'])->name('addToCart');
     Route::get('/remove-from-cart', [CartController::class, 'decrement'])->name('removeFromToCart');
     Route::get('/delete-cart', [CartController::class, 'deleteCart'])->name('deleteCart');
-    Route::get('/', [CartController::class, 'cart'])->name('cart');
     Route::get('/merge', [CartController::class, 'mergecart'])->name('mergecart');
 //    Route::get('/adjust', [CartController::class, 'AdjustmentCart'])->name('AdjustmentCart');
     Route::delete('{cart}/destroy', [CartController::class, 'destroy'])->name('destroyFromCart');
@@ -157,3 +158,8 @@ Route::middleware('auth')->prefix('coupon')->group(function () {
     Route::get('/destroy-session', [CouponController::class, 'destroySession'])->name('coupon.destroy.session');
     Route::get('/user-destroy-session', [CouponController::class, 'userdestroySession'])->name('coupon.destroy.session.byuser');
 });
+Route::middleware('auth')->prefix('payment')->group(function () {
+    Route::post('/send', [PaymentController::class, 'send'])->name('payment.send');
+});
+
+
