@@ -41,14 +41,22 @@
                                 <!-- <i class="bi bi-x-circle-fill text-danger fs-1"></i> -->
                                 @if($status == 'OK')
                                     <h5 class="mt-3 text-success">پرداخت شما با موفقیت انجام شد</h5>
+                                    @if(isset($ref_number))
+                                        <h6 class="mt-3">شماره پیگیری: {{ $ref_number }}</h6>
+                                    @endif
                                 @elseif($status == 'NOK')
                                     <h5 class="mt-3 text-danger">خطا در پرداخت</h5>
+                                    <h6 class="mt-3">در صورت کسر مبلغ از حساب، با فروشگاه تماس بگیرید.</h6>
                                 @else
                                     <h5 class="mt-3 text-danger">خطای نا شناخته</h5>
                                 @endif
                             </div>
                             <div class="d-flex justify-content-between">
-                                <a href="#" class="btn btn-primary">مشاهده سفارش</a>
+                                @if($status == 'OK')
+                                    <a href="#" class="btn btn-primary">مشاهده سفارش</a>
+                                @else
+                                    <a href="{{ route('cart') }}" class="btn btn-primary">سبد خرید</a>
+                                @endif
                                 <a href="{{ route('home') }}" class="btn btn-dark">بازگشت به سایت</a>
                             </div>
                         </div>

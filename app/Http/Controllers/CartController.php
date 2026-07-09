@@ -225,7 +225,6 @@ class CartController extends Controller
         $session_id = $request->session()->getId();
         $user_id = auth()->id();
 
-
         if ($user_id) {
             $query = Cart::where('user_id', $user_id);
         } else {
