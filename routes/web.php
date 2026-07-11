@@ -130,6 +130,7 @@ Route::middleware('auth')->prefix('profile')->group(function () {
     Route::get('/remove_from_wishlist', [WishListController::class, 'removeFromWishlist'])->name('removeFromWishlist');
 
     Route::get('/orders', [ProfileController::class, 'orders'])->name('profile.orders');
+    Route::get('/transactions', [ProfileController::class, 'transactions'])->name('profile.transactions');
 });
 Route::get('/add_to_wishlist', [WishListController::class, 'addToWishlist'])->name('addToWishlist');
 

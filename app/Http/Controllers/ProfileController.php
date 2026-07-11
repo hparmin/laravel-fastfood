@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Order;
 use App\Models\Province;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\wishlist;
@@ -118,9 +119,11 @@ class ProfileController extends Controller
     public function orders()
     {
         $orders = auth()->user()->orders()->orderByDesc('created_at')->with(['address','items'])->paginate(7);
-//        foreach ($orders as $order){
-//            dd($order->products);
-//        }
         return view('profile.orders.index',compact('orders'));
+    }
+    public function transactions()
+    {
+        $transactions = auth()->user()->transactions()->orderByDesc('created_at')->paginate(7);
+        return view('profile.orders.transactions',compact('transactions'));
     }
 }
