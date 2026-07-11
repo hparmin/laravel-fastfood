@@ -24,4 +24,9 @@ class Transaction extends Model
                 break;
         }
     }
+
+    public function orders()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

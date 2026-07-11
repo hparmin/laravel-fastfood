@@ -15,6 +15,7 @@ use \App\Http\Controllers\WishListController;
 use \App\Http\Controllers\CartController;
 use \App\Http\Controllers\CouponController;
 use \App\Http\Controllers\PaymentController;
+use \App\Http\Controllers\TransactionController;
 
 
 // app routes
@@ -27,6 +28,9 @@ Route::middleware('auth')->get('/panel', function () {
     return view('panel.index');
 })->name('panel.index');
 // the slider:
+Route::middleware('auth')->prefix('profile')->group(function () {
+//    Route::get('/transactions', [TransactionController::class, 'show'])->name('profile.transactions');
+});
 Route::middleware('auth')->prefix('sliders')->group(function () {
     Route::get('/create', [SlidersController::class, 'create'])->name('slider.create');
     Route::post('/store', [SlidersController::class, 'store'])->name('slider.store');
@@ -130,7 +134,6 @@ Route::middleware('auth')->prefix('profile')->group(function () {
     Route::get('/remove_from_wishlist', [WishListController::class, 'removeFromWishlist'])->name('removeFromWishlist');
 
     Route::get('/orders', [ProfileController::class, 'orders'])->name('profile.orders');
-    Route::get('/transactions', [ProfileController::class, 'transactions'])->name('profile.transactions');
 });
 Route::get('/add_to_wishlist', [WishListController::class, 'addToWishlist'])->name('addToWishlist');
 

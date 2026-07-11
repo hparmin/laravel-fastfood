@@ -38,13 +38,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link  {{ request()->is('*orders*') ? 'active' : '' }}" href="{{ route('profile.orders') }}">
                     <i class="bi bi-basket me-2"></i>
                     سفارشات
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link"   href="#">
                     <i class="bi bi-currency-dollar me-2"></i>
                     تراکنش ها
                 </a>

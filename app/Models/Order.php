@@ -29,6 +29,16 @@ class Order extends Model
         return $this->belongsTo(UserAddress::class);
     }
 
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
+    }
+
     public function getStatusAttribute($status)
     {
         switch ($status) {

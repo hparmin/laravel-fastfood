@@ -75,6 +75,15 @@ class OrderController extends Controller
                 $query->delete();
 
             DB::commit();
+
+            session()->remove('coupon');
         }
+    }
+
+    public function showInPanel()
+    {
+        $orders = Order::latest()->with(['address','items','coupon'])->paginate(4);
+//        dd($orders);
+        return view('panel.orders.index',compact('orders'));
     }
 }
