@@ -33,8 +33,10 @@
                             @endif
                             <p>{{ $product->description }}</p>
 
-                            <form x-data="{ quantity : 1 }" action="#" class="mt-5 d-flex">
-                                <button class="btn-add">افزودن به سبد خرید</button>
+                            <form x-data="{ quantity : 1 }" action="{{ route('addToCart') }}" method="get" class="mt-5 d-flex">
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="qty" :value="quantity">
+                                <button type="submit" class="btn-add">افزودن به سبد خرید</button>
                                 <div class="input-counter ms-4">
                                     <span @click="quantity < {{ $product->quantity }} && quantity++" class="plus-btn">
                                         +

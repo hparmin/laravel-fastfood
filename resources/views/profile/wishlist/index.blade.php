@@ -1,5 +1,5 @@
 @extends('profile.layout.master')
-@section('title','پنل کاربری')
+@section('title','لیست علاقه مندی ها')
 @section('profile.content')
     <div class="col-sm-12 col-lg-9">
         <div class="table-responsive">

@@ -128,6 +128,8 @@ Route::middleware('auth')->prefix('profile')->group(function () {
 
     Route::get('/wishlist', [ProfileController::class, 'showWishlist'])->name('wishlist.index');
     Route::get('/remove_from_wishlist', [WishListController::class, 'removeFromWishlist'])->name('removeFromWishlist');
+
+    Route::get('/orders', [ProfileController::class, 'orders'])->name('profile.orders');
 });
 Route::get('/add_to_wishlist', [WishListController::class, 'addToWishlist'])->name('addToWishlist');
 

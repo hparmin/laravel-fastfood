@@ -7,7 +7,7 @@
             <a href="{{ route('profile.addresses') }}">آدرس ها</a>
         </li>
         <li class="list-group-item">
-            <a href="./orders.html">سفارشات</a>
+            <a href="{{ route('profile.orders') }}">سفارشات</a>
         </li>
         <li class="list-group-item">
             <a href="./transactions.html">تراکنش ها</a>
