@@ -1248,6 +1248,9 @@ a.remove-coupon::after{
 a.remove-coupon:hover::after{
     background-color: #ccc;
 }
+ul.list-group > li.actived{
+    background-color: #ddd;
+}
 /* end styles of sweetalert2 */
 /* Responsive */
 @media (max-width: 1300px) {

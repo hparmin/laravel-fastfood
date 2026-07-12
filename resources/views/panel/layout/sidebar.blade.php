@@ -37,8 +37,8 @@
                     دسته بندی
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link  {{ request()->is('*orders*') ? 'active' : '' }}" href="{{ route('profile.orders') }}">
+            <li class="nav-item ">
+            <a class="nav-link {{ request()->is('*order*') ? 'active' : '' }}" href="{{ route('panel.orders') }}">
                     <i class="bi bi-basket me-2"></i>
                     سفارشات
                 </a>

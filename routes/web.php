@@ -16,6 +16,7 @@ use \App\Http\Controllers\CartController;
 use \App\Http\Controllers\CouponController;
 use \App\Http\Controllers\PaymentController;
 use \App\Http\Controllers\TransactionController;
+use \App\Http\Controllers\OrderController;
 
 
 // app routes
@@ -28,9 +29,6 @@ Route::middleware('auth')->get('/panel', function () {
     return view('panel.index');
 })->name('panel.index');
 // the slider:
-Route::middleware('auth')->prefix('profile')->group(function () {
-//    Route::get('/transactions', [TransactionController::class, 'show'])->name('profile.transactions');
-});
 Route::middleware('auth')->prefix('sliders')->group(function () {
     Route::get('/create', [SlidersController::class, 'create'])->name('slider.create');
     Route::post('/store', [SlidersController::class, 'store'])->name('slider.store');
@@ -97,6 +95,10 @@ Route::middleware('auth')->prefix('products')->group(function () {
     Route::delete('/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::delete('/{product_id}/hard_delete', [ProductController::class, 'hard_delete'])->name('products.hard.delete');
 });
+// panel
+Route::middleware('auth')->prefix('panel')->group(function () {
+    Route::get('/orders', [OrderController::class, 'showInPanel'])->name('panel.orders');
+});
 // app
 Route::prefix('products')->group(function () {
     Route::get('/single/{product:slug}', [ProductController::class, 'single'])->name('products.single');
@@ -117,8 +119,7 @@ Route::get('/test', function () {
     return "hellow";
 })->name('test')->middleware('auth');
 
-
-// panel
+// profile
 Route::middleware('auth')->prefix('profile')->group(function () {
     Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/{user}', [ProfileController::class, 'update'])->name('profile.update');
@@ -133,6 +134,7 @@ Route::middleware('auth')->prefix('profile')->group(function () {
     Route::get('/wishlist', [ProfileController::class, 'showWishlist'])->name('wishlist.index');
     Route::get('/remove_from_wishlist', [WishListController::class, 'removeFromWishlist'])->name('removeFromWishlist');
 
+    Route::get('/transactions', [TransactionController::class, 'show'])->name('profile.transactions');
     Route::get('/orders', [ProfileController::class, 'orders'])->name('profile.orders');
 });
 Route::get('/add_to_wishlist', [WishListController::class, 'addToWishlist'])->name('addToWishlist');
