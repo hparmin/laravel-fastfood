@@ -53,7 +53,7 @@
                             </div>
                             <div class="d-flex justify-content-between">
                                 @if($status == 'OK')
-                                    <a href="#" class="btn btn-primary">مشاهده سفارش</a>
+                                    <a href="{{ route('profile.orders') }}" class="btn btn-primary">مشاهده سفارش</a>
                                 @else
                                     <a href="{{ route('cart') }}" class="btn btn-primary">سبد خرید</a>
                                 @endif

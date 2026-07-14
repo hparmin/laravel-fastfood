@@ -98,6 +98,7 @@ Route::middleware('auth')->prefix('products')->group(function () {
 // panel
 Route::middleware('auth')->prefix('panel')->group(function () {
     Route::get('/orders', [OrderController::class, 'showInPanel'])->name('panel.orders');
+    Route::get('/transactions', [TransactionController::class, 'showInPanel'])->name('panel.transactions');
 });
 // app
 Route::prefix('products')->group(function () {

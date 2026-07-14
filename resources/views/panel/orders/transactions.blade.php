@@ -1,51 +1,51 @@
 @extends('panel.layout.master')
-@section('title','سفارش ها')
+@section('title','تراکنش ها')
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-5">
-        <h4 class="fw-bold">سفارش ها</h4>
+        <h4 class="fw-bold">تراکنش ها</h4>
     </div>
     <div class="table-responsive">
         <table class="table align-middle">
             <thead>
             <tr>
-                <th>شماره سفارش</th>
+                <th>شماره پیگیری تراکنش</th>
+                <th>نام کاربر</th>
                 <th>آدرس</th>
-                <th>وضعیت</th>
                 <th>وضعیت پرداخت</th>
-                <th>قیمت کل</th>
+                <th>مبلغ تراکنش</th>
                 <th>تاریخ</th>
                 <th>عملیات</th>
             </tr>
             </thead>
             <tbody>
-            @foreach ($orders as $order)
+            @foreach ($transactions as $transaction)
                 <tr>
                     <th>
-                        {{ $order->id }}
+                        {{ $transaction->ref_number }}
                     </th>
-                    <td>{{ $order->address->title }}</td>
-                    <td>{{ $order->status }}</td>
+                    <td>{{ $transaction->user->name }}</td>
+                    <td>{{ $transaction->order->address->title }}</td>
                     <td>
                             <span
-                                class="{{ $order->getRawOriginal('payment_status') ? 'text-success' : 'text-danger' }}">{{ $order->payment_status ? 'موفق' : 'ناموفق' }}
+                                class="{{ $transaction->getRawOriginal('status') ? 'text-success' : 'text-danger' }}">{{ $transaction->status }}
                             </span>
                     </td>
-                    <td>{{ number_format($order->paying_amount) }} تومان</td>
-                    <td>{{ verta($order->created_at)->format('%d %B %Y') }}</td>
+                    <td>{{ number_format($transaction->amount) }} تومان</td>
+                    <td>{{ verta($transaction->created_at)->format('%d %B %Y') }}</td>
                     <td>
                         <div class="d-flex">
                             <div>
                                 <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                        data-bs-target="#modal-{{ $order->id }}">
+                                        data-bs-target="#modal-{{ $transaction->id }}">
                                     محصولات
                                 </button>
 
-                                <div class="modal fade" id="modal-{{ $order->id }}">
+                                <div class="modal fade" id="modal-{{ $transaction->id }}">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h6 class="modal-title">محصولات سفارش
-                                                    شماره {{ $order->id }}</h6>
+                                                <h6 class="modal-title">محصولات تراکنش
+                                                    شماره {{ $transaction->id }}</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                             </div>
@@ -64,7 +64,7 @@
                                                     @php
                                                     $total_price = 0;
                                                     @endphp
-                                                    @foreach ($order->items()->with('product')->get() as $item)
+                                                    @foreach ($transaction->order->items as $item)
                                                         @php
                                                             $total_price += $item->subtotal;
                                                         @endphp
@@ -84,19 +84,19 @@
                                                     @endforeach
                                                     </tbody>
                                                 </table>
-                                                @if($order->coupon)
+                                                @if($transaction->order->coupon)
                                                     <div style="display: flex; gap: 60px;">
                                                         <div>
                                                             <span>کد تخفیف:</span>
-                                                            <span>{{ $order->coupon->code }}</span>
+                                                            <span>{{ $transaction->order->coupon->code }}</span>
                                                         </div>
                                                         <div>
                                                             <span>درصد تخفیف:</span>
-                                                            <span>{{ $order->coupon->percentage }}</span>
+                                                            <span>{{ $transaction->order->coupon->percentage }}</span>
                                                         </div>
                                                         <div>
                                                             <span>میزان تخفیف:</span>
-                                                            <span>{{ number_format($total_price-$order->paying_amount) }}</span>
+                                                            <span>{{ number_format($total_price-$transaction->order->paying_amount) }}</span>
                                                         </div>
                                                     </div>
                                                 @endif
@@ -112,6 +112,6 @@
             @endforeach
             </tbody>
         </table>
-        {{ $orders->withQueryString()->links('panel.layout.paginate') }}
+        {{ $transactions->withQueryString()->links('panel.layout.paginate') }}
     </div>
 @endsection

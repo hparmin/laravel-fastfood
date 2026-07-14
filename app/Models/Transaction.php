@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'transactions';
     protected $guarded = [];
 
     public function getStatusAttribute($status)
     {
-        switch ($status){
+        switch ($status) {
             case '0':
                 return 'نا موفق';
                 break;
@@ -25,8 +25,13 @@ class Transaction extends Model
         }
     }
 
-    public function orders()
+    public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

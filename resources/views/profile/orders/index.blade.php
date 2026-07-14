@@ -12,6 +12,7 @@
                     <th>وضعیت پرداخت</th>
                     <th>قیمت کل</th>
                     <th>تاریخ</th>
+                    <th>عملیات</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -34,14 +35,14 @@
                         <td>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#modal-{{ $order->id }}">
-                                محصولات
+                                نمایش
                             </button>
                             <div class="modal fade" id="modal-{{ $order->id }}" aria-hidden="true" style="display: none;">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h6 class="modal-title">محصولات سفارش
-                                                شماره 25</h6>
+                                                شماره {{ $order->id }}</h6>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                         </div>
@@ -57,7 +58,13 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
+                                                @php
+                                                    $total_price = 0;
+                                                @endphp
                                                 @foreach($order->items()->with('product')->get() as $item)
+                                                    @php
+                                                        $total_price += $item->subtotal;
+                                                    @endphp
                                                     <tr>
                                                         <th>
                                                             <img class="rounded" src="{{ asset('/images/products/'.$item->product->primary_image) }}" width="80"
@@ -73,6 +80,31 @@
                                                 @endforeach
                                                 </tbody>
                                             </table>
+                                            @if($order->coupon)
+                                                <div style="display: flex; gap: 40px;">
+                                                    <div>
+                                                        <span>کد تخفیف:</span>
+                                                        <span>{{ $order->coupon->code }}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span>درصد تخفیف:</span>
+                                                        <span>{{ $order->coupon->percentage }}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span>جمع مبلغ:</span>
+                                                        <span>{{ number_format($total_price) }} تومان</span>
+                                                    </div>
+                                                    <div>
+                                                        <span>میزان تخفیف:</span>
+                                                        <span>{{ number_format($total_price-$order->paying_amount) }} تومان</span>
+                                                    </div>
+                                                    </div>
+                                                    <div>
+                                                        <span>مبلغ پرداختی:</span>
+                                                        <span>{{ number_format($order->paying_amount) }} تومان</span>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

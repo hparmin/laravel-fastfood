@@ -118,7 +118,10 @@ class ProfileController extends Controller
 
     public function orders()
     {
-        $orders = auth()->user()->orders()->orderByDesc('created_at')->with(['address','items','transaction'])->paginate(7);
+        $orders = auth()->user()->orders()->orderByDesc('created_at')->with(['address','items','transaction','coupon'])->paginate(7);
+        foreach ($orders as $order) {
+//        dd($order->coupon);
+        }
         return view('profile.orders.index',compact('orders'));
     }
     public function transactions()

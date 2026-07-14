@@ -216,6 +216,7 @@ class CartController extends Controller
         } else {
             $addresses = null;
         }
+        $addresses = $addresses->isEmpty() ? null : $addresses;
 
         return view('profile.cart.index', compact('cart_items', 'before_off_payment', 'after_off_payment', 'addresses', 'coupon'));
     }

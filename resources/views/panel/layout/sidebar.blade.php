@@ -44,7 +44,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"   href="#">
+                <a class="nav-link {{ request()->is('*transactions*') ? 'active' : '' }}" href="{{ route('panel.transactions') }}">
                     <i class="bi bi-currency-dollar me-2"></i>
                     تراکنش ها
                 </a>

@@ -82,7 +82,7 @@ class OrderController extends Controller
 
     public function showInPanel()
     {
-        $orders = Order::latest()->with(['address','items','coupon'])->paginate(4);
+        $orders = Order::latest()->with(['address','items','coupon'])->paginate(8);
 //        dd($orders);
         return view('panel.orders.index',compact('orders'));
     }
